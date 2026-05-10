@@ -1,0 +1,331 @@
+
+--- BROADCAST 2026-04-27 23:28:39.501709 ---
+Context: CSE | 1st Year | Semester 1
+TO: purnimapuri3836@gmail.com
+BODY:
+
+Dear Professor A,
+
+The subject selection window for CSE 1st Year Semester 1 is now open.
+Priority is based on your seniority level (L1).
+
+Available Subjects:
+- PH3151: Engineering Physics
+- GE3151: Problem Solving and Python Programming
+- GE3152: Heritage of Tamils
+
+Please log in to your dashboard to make your selection:
+http://127.0.0.1:5000/faculty/selection
+
+Regards,
+Admin Team
+
+------------------------------
+TO: purnima.g.in@gmail.com
+BODY:
+
+Dear Professor B,
+
+The subject selection window for CSE 1st Year Semester 1 is now open.
+Priority is based on your seniority level (L2).
+
+Available Subjects:
+- PH3151: Engineering Physics
+- GE3151: Problem Solving and Python Programming
+- GE3152: Heritage of Tamils
+
+Please log in to your dashboard to make your selection:
+http://127.0.0.1:5000/faculty/selection
+
+Regards,
+Admin Team
+
+------------------------------
+TO: purnimagpuri@gmail.com
+BODY:
+
+Dear Professor C,
+
+The subject selection window for CSE 1st Year Semester 1 is now open.
+Priority is based on your seniority level (L3).
+
+Available Subjects:
+- PH3151: Engineering Physics
+- GE3151: Problem Solving and Python Programming
+- GE3152: Heritage of Tamils
+
+Please log in to your dashboard to make your selection:
+http://127.0.0.1:5000/faculty/selection
+
+Regards,
+Admin Team
+
+------------------------------
+
+--- BROADCAST 2026-04-27 23:30:44.021547 ---
+Context: CSE | 3rd Year | Semester 5
+TO: purnimagpuri@gmail.com
+BODY:
+
+Dear Professor G,
+
+The subject selection window for CSE 3rd Year Semester 5 is now open.
+Priority is based on your seniority level (L1).
+
+Available Subjects:
+- CS3501: Compiler Design
+- CS3591: Computer Networks
+- CB3491: Cryptography and Cyber Security
+- CS3551: Distributed Computing
+- CCS334: Big Data Analytics
+
+Please log in to your dashboard to make your selection:
+http://127.0.0.1:5000/faculty/selection
+
+Regards,
+Admin Team
+
+------------------------------
+TO: purnimapuri3836@gmail.com
+BODY:
+
+Dear Professor H,
+
+The subject selection window for CSE 3rd Year Semester 5 is now open.
+Priority is based on your seniority level (L2).
+
+Available Subjects:
+- CS3501: Compiler Design
+- CS3591: Computer Networks
+- CB3491: Cryptography and Cyber Security
+- CS3551: Distributed Computing
+- CCS334: Big Data Analytics
+
+Please log in to your dashboard to make your selection:
+http://127.0.0.1:5000/faculty/selection
+
+Regards,
+Admin Team
+
+------------------------------
+TO: purnima.g.in@gmail.com
+BODY:
+
+Dear Professor I,
+
+The subject selection window for CSE 3rd Year Semester 5 is now open.
+Priority is based on your seniority level (L3).
+
+Available Subjects:
+- CS3501: Compiler Design
+- CS3591: Computer Networks
+- CB3491: Cryptography and Cyber Security
+- CS3551: Distributed Computing
+- CCS334: Big Data Analytics
+
+Please log in to your dashboard to make your selection:
+http://127.0.0.1:5000/faculty/selection
+
+Regards,
+Admin Team
+
+------------------------------
+
+--- BROADCAST 2026-04-28 11:22:33.636473 ---
+Context: CSE | 2nd Year | Semester 3
+TO: purnimapuri3836@gmail.com
+BODY:
+
+Dear Professor_A,
+
+The subject selection window for CSE 2nd Year Semester 3 is now open.
+Priority is based on your seniority level (L1).
+
+Available Subjects:
+- CS3301: Data Structures
+- CS3391: Object Oriented Programming
+- CS3351: Digital Principles and Computer Organization
+- CS3352: Foundations of Data Science
+- MA3354: Discrete Mathematics
+
+Please log in to your dashboard to make your selection:
+http://127.0.0.1:5000/faculty/selection
+
+Regards,
+Admin Team
+
+------------------------------
+TO: purnimagpuri@gmail.com
+BODY:
+
+Dear Professor_B,
+
+The subject selection window for CSE 2nd Year Semester 3 is now open.
+Priority is based on your seniority level (L2).
+
+Available Subjects:
+- CS3301: Data Structures
+- CS3391: Object Oriented Programming
+- CS3351: Digital Principles and Computer Organization
+- CS3352: Foundations of Data Science
+- MA3354: Discrete Mathematics
+
+Please log in to your dashboard to make your selection:
+http://127.0.0.1:5000/faculty/selection
+
+Regards,
+Admin Team
+
+------------------------------
+TO: purnima.g.in@gmail.com
+BODY:
+
+Dear Professor_C,
+
+The subject selection window for CSE 2nd Year Semester 3 is now open.
+Priority is based on your seniority level (L3).
+
+Available Subjects:
+- CS3301: Data Structures
+- CS3391: Object Oriented Programming
+- CS3351: Digital Principles and Computer Organization
+- CS3352: Foundations of Data Science
+- MA3354: Discrete Mathematics
+
+Please log in to your dashboard to make your selection:
+http://127.0.0.1:5000/faculty/selection
+
+Regards,
+Admin Team
+
+------------------------------
+TO: purnimapuri3836@gmail.com
+BODY:
+
+Dear Professor_D,
+
+The subject selection window for CSE 2nd Year Semester 3 is now open.
+Priority is based on your seniority level (L4).
+
+Available Subjects:
+- CS3301: Data Structures
+- CS3391: Object Oriented Programming
+- CS3351: Digital Principles and Computer Organization
+- CS3352: Foundations of Data Science
+- MA3354: Discrete Mathematics
+
+Please log in to your dashboard to make your selection:
+http://127.0.0.1:5000/faculty/selection
+
+Regards,
+Admin Team
+
+------------------------------
+TO: purnimagpuri@gmail.com
+BODY:
+
+Dear Professor_E,
+
+The subject selection window for CSE 2nd Year Semester 3 is now open.
+Priority is based on your seniority level (L5).
+
+Available Subjects:
+- CS3301: Data Structures
+- CS3391: Object Oriented Programming
+- CS3351: Digital Principles and Computer Organization
+- CS3352: Foundations of Data Science
+- MA3354: Discrete Mathematics
+
+Please log in to your dashboard to make your selection:
+http://127.0.0.1:5000/faculty/selection
+
+Regards,
+Admin Team
+
+------------------------------
+
+--- NEXT-LEVEL NOTIFY 2026-04-28 11:26:33.773074 ---
+TO: purnimagpuri@gmail.com
+BODY:
+Dear Professor_B,
+
+Level 1 faculty have completed their subject selections:
+  • Professor_A (L1) → CS3301: Data Structures
+
+It is now your turn (Priority Level 2) to select your subject.
+
+Remaining Available Subjects:
+  - CS3391: Object Oriented Programming
+  - CS3351: Digital Principles and Computer Organization
+  - CS3352: Foundations of Data Science
+  - MA3354: Discrete Mathematics
+
+Please log in to make your selection:
+http://127.0.0.1:5000/faculty/selection
+
+Regards,
+Admin Team
+──────────────────────────────
+
+--- NEXT-LEVEL NOTIFY 2026-04-28 11:29:24.346276 ---
+TO: purnima.g.in@gmail.com
+BODY:
+Dear Professor_C,
+
+Level 2 faculty have completed their subject selections:
+  • Professor_B (L2) → CS3391: Object Oriented Programming
+
+It is now your turn (Priority Level 3) to select your subject.
+
+Remaining Available Subjects:
+  - CS3351: Digital Principles and Computer Organization
+  - CS3352: Foundations of Data Science
+  - MA3354: Discrete Mathematics
+
+Please log in to make your selection:
+http://127.0.0.1:5000/faculty/selection
+
+Regards,
+Admin Team
+──────────────────────────────
+
+--- NEXT-LEVEL NOTIFY 2026-04-28 11:35:36.565023 ---
+TO: purnimapuri3836@gmail.com
+BODY:
+Dear Professor_D,
+
+Level 3 faculty have completed their subject selections:
+  • Professor_C (L3) → CS3351: Digital Principles and Computer Organization
+
+It is now your turn (Priority Level 4) to select your subject.
+
+Remaining Available Subjects:
+  - CS3352: Foundations of Data Science
+  - MA3354: Discrete Mathematics
+
+Please log in to make your selection:
+http://127.0.0.1:5000/faculty/selection
+
+Regards,
+Admin Team
+──────────────────────────────
+
+--- NEXT-LEVEL NOTIFY 2026-04-28 11:53:34.558475 ---
+TO: purnimapuri3836@gmail.com
+BODY:
+Dear Professor_E,
+
+Level 4 faculty have completed their subject selections:
+  • Professor_D (L4) → CS3352: Foundations of Data Science
+
+It is now your turn (Priority Level 5) to select your subject.
+
+Remaining Available Subjects:
+  - MA3354: Discrete Mathematics
+
+Please log in to make your selection:
+http://127.0.0.1:5000/faculty/selection
+
+Regards,
+Admin Team
+──────────────────────────────

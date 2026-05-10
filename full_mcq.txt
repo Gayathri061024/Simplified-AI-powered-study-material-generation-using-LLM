@@ -1,0 +1,50 @@
+### Q1. What is the primary purpose of Control Flow in a program?
+a) To execute instructions in a linear sequence
+b) To make decisions based on conditions
+c) To repeat instructions until a condition is met
+d) To manage memory allocation
+
+Answer: b) To make decisions based on conditions
+
+Explanation: Control Flow is used to make decisions based on conditions, such as user input or system parameters.
+
+### Q2. What is the name of the graph used to represent the flow of control in a program?
+a) Control Flow Graph
+b) Pseudocode Graph
+c) Flowchart Graph
+d) Algorithm Graph
+
+Answer: a) Control Flow Graph
+
+Explanation: A Control Flow Graph is a graphical representation of the flow of control in a program.
+
+### Q3. What is the primary advantage of using Control Flow in a program?
+a) Improved program readability and maintainability
+b) Reduced complexity of code
+c) Enhanced performance and scalability
+d) All of the above
+
+Answer: d) All of the above
+
+Explanation: Control Flow has several advantages, including improved program readability and maintainability, reduced complexity of code, and enhanced performance and scalability.
+
+### Q4. What is the name of the structure used to repeat instructions until a condition is met?
+a) Loop
+b) Branch
+c) Conditional Statement
+d) Function
+
+Answer: a) Loop
+
+Explanation: A Loop is a structure used to repeat instructions until a condition is met.
+
+### Q5. What is the time complexity of the example code provided?
+a) O(1)
+b) O(n)
+c) O(log n)
+d) O(n^2)
+
+Answer: b) O(n)
+
+Explanation: The time complexity of the example code is O(n), where n is the number of iterations.
+

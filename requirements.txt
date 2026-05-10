@@ -1,0 +1,9 @@
+flask
+groq
+fpdf2
+python-dotenv
+pymupdf
+flask-login
+flask-sqlalchemy
+gunicorn
+markdown

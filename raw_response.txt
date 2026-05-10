@@ -1,0 +1,290 @@
+## SUMMARY
+
+Dijkstra's Algorithm is a well-known graph search algorithm used to find the shortest path between two nodes in a graph. It was first proposed by Edsger W. Dijkstra in 1959 and has since become a fundamental concept in computer science and mathematics. The algorithm works by maintaining a list of visited nodes and their shortest distances from the source node. It iteratively selects the node with the minimum distance and updates the distances of its neighboring nodes. Dijkstra's Algorithm can be classified into two types: Single-Source Shortest Path (SSSP) and All-Pairs Shortest Path (APSP). It has numerous real-world applications, including network routing, traffic management, and logistics optimization. The algorithm is particularly useful for solving problems in transportation networks, where the goal is to find the shortest path between two locations. Dijkstra's Algorithm is an essential concept in data structures and algorithms, and its importance lies in its ability to provide optimal solutions to complex problems. The algorithm has been widely used in various fields, including computer science, mathematics, and engineering. It has also been implemented in various programming languages, making it a versatile tool for solving problems. Dijkstra's Algorithm is a crucial concept for anyone studying graph theory and data structures.
+
+## SHORT NOTES
+
+### Detailed Definition with Examples
+
+Dijkstra's Algorithm is a graph search algorithm that finds the shortest path between two nodes in a weighted graph. The algorithm works by maintaining a list of visited nodes and their shortest distances from the source node. It iteratively selects the node with the minimum distance and updates the distances of its neighboring nodes. The algorithm can be applied to both directed and undirected graphs.
+
+Example: Suppose we have a weighted graph with nodes A, B, C, and D, and edges AB, BC, CD, and DA. If we want to find the shortest path from node A to node D, we can use Dijkstra's Algorithm.
+
+### Types and Classifications
+
+Dijkstra's Algorithm can be classified into two types:
+
+1. **Single-Source Shortest Path (SSSP)**: This algorithm finds the shortest path from a single source node to all other nodes in the graph.
+2. **All-Pairs Shortest Path (APSP)**: This algorithm finds the shortest path between all pairs of nodes in the graph.
+
+### Step by Step Working Principle
+
+The working principle of Dijkstra's Algorithm can be summarized as follows:
+
+1. Initialize the distance to the source node as 0, and the distance to all other nodes as infinity.
+2. Create a list of unvisited nodes and initialize the priority queue with the source node.
+3. While the priority queue is not empty, extract the node with the minimum distance from the queue.
+4. For each neighboring node of the extracted node, calculate the tentative distance and update the distance if it is less than the current distance.
+5. Mark the extracted node as visited and remove it from the list of unvisited nodes.
+6. Repeat steps 3-5 until the destination node is reached.
+
+### Important Formulas and Equations
+
+There are no specific formulas or equations associated with Dijkstra's Algorithm.
+
+### Diagrams Description
+
+The diagrams associated with Dijkstra's Algorithm typically show the following:
+
+* A weighted graph with nodes and edges.
+* The distance to each node from the source node.
+* The priority queue with nodes and their distances.
+* The shortest path between the source node and the destination node.
+
+### Advantages and Disadvantages
+
+Advantages:
+
+* Dijkstra's Algorithm provides optimal solutions for single-source shortest path problems.
+* It is easy to implement and understand.
+* It can be applied to both directed and undirected graphs.
+
+Disadvantages:
+
+* The algorithm has a high time complexity of O(|E|log|V|) in the worst case.
+* It requires a lot of memory to store the priority queue and the distances to each node.
+
+### Real World Applications with Examples
+
+Dijkstra's Algorithm has numerous real-world applications, including:
+
+* Network routing: Dijkstra's Algorithm is used to find the shortest path between two nodes in a network.
+* Traffic management: Dijkstra's Algorithm can be used to optimize traffic flow and reduce congestion.
+* Logistics optimization: Dijkstra's Algorithm can be used to find the shortest path between two locations in a transportation network.
+
+Example: Suppose we want to find the shortest path between two cities, A and B, in a transportation network. We can use Dijkstra's Algorithm to find the shortest path.
+
+### Comparison with Related Concepts
+
+Dijkstra's Algorithm can be compared with other graph search algorithms, such as:
+
+* Breadth-First Search (BFS): BFS is a graph search algorithm that finds the shortest path between two nodes in an unweighted graph.
+* Depth-First Search (DFS): DFS is a graph search algorithm that finds the shortest path between two nodes in a graph, but it does not guarantee an optimal solution.
+
+### Time and Space Complexity
+
+The time complexity of Dijkstra's Algorithm is O(|E|log|V|) in the worst case, where |E| is the number of edges and |V| is the number of vertices.
+
+The space complexity of Dijkstra's Algorithm is O(|V| + |E|), where |V| is the number of vertices and |E| is the number of edges.
+
+### Important Terminology and Definitions
+
+Important terminology and definitions associated with Dijkstra's Algorithm include:
+
+* **Source node**: The node from which the algorithm starts.
+* **Destination node**: The node to which the algorithm is searching for the shortest path.
+* **Shortest path**: The path between two nodes with the minimum distance.
+* **Priority queue**: A data structure that stores nodes and their distances, with the node with the minimum distance at the top of the queue.
+
+## CODING EXAMPLES
+
+### C Implementation
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+
+#define INF INT_MAX
+
+typedef struct Node {
+    int distance;
+    int vertex;
+} Node;
+
+typedef struct Graph {
+    int numVertices;
+    int** adjMatrix;
+} Graph;
+
+void dijkstra(Graph* graph, int source) {
+    int* distances = (int*)malloc(graph->numVertices * sizeof(int));
+    int* visited = (int*)malloc(graph->numVertices * sizeof(int));
+
+    for (int i = 0; i < graph->numVertices; i++) {
+        distances[i] = INF;
+        visited[i] = 0;
+    }
+
+    distances[source] = 0;
+
+    for (int i = 0; i < graph->numVertices - 1; i++) {
+        int minVertex = -1;
+        for (int j = 0; j < graph->numVertices; j++) {
+            if (!visited[j] && (minVertex == -1 || distances[j] < distances[minVertex])) {
+                minVertex = j;
+            }
+        }
+
+        visited[minVertex] = 1;
+
+        for (int k = 0; k < graph->numVertices; k++) {
+            if (!visited[k] && graph->adjMatrix[minVertex][k] != 0) {
+                int newDistance = distances[minVertex] + graph->adjMatrix[minVertex][k];
+                if (newDistance < distances[k]) {
+                    distances[k] = newDistance;
+                }
+            }
+        }
+    }
+
+    printf("Shortest distances from node %d:\n", source);
+    for (int i = 0; i < graph->numVertices; i++) {
+        printf("Node %d: %d\n", i, distances[i]);
+    }
+}
+
+int main() {
+    Graph graph;
+    graph.numVertices = 5;
+    graph.adjMatrix = (int**)malloc(graph.numVertices * sizeof(int*));
+    for (int i = 0; i < graph.numVertices; i++) {
+        graph.adjMatrix[i] = (int*)malloc(graph.numVertices * sizeof(int));
+    }
+
+    graph.adjMatrix[0][1] = 4;
+    graph.adjMatrix[0][2] = 2;
+    graph.adjMatrix[1][3] = 5;
+    graph.adjMatrix[2][3] = 1;
+    graph.adjMatrix[3][4] = 3;
+
+    dijkstra(&graph, 0);
+
+    return 0;
+}
+```
+
+### Python Implementation
+
+```python
+import sys
+import heapq
+
+def dijkstra(graph, source):
+    distances = {node: sys.maxsize for node in graph}
+    distances[source] = 0
+
+    pq = [(0, source)]
+
+    while pq:
+        current_distance, current_node = heapq.heappop(pq)
+
+        if current_distance > distances[current_node]:
+            continue
+
+        for neighbor, weight in graph[current_node].items():
+            distance = current_distance + weight
+
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(pq, (distance, neighbor))
+
+    return distances
+
+graph = {
+    0: {1: 4, 2: 2},
+    1: {3: 5},
+    2: {3: 1},
+    3: {4: 3}
+}
+
+distances = dijkstra(graph, 0)
+print(distances)
+```
+
+## IMPORTANT QUESTIONS
+
+Q1. (2 marks) What is Dijkstra's Algorithm?
+Answer: Dijkstra's Algorithm is a graph search algorithm used to find the shortest path between two nodes in a graph.
+
+Q2. (13 marks) Explain the working principle of Dijkstra's Algorithm.
+Answer: The working principle of Dijkstra's Algorithm can be summarized as follows:
+
+1. Initialize the distance to the source node as 0, and the distance to all other nodes as infinity.
+2. Create a list of unvisited nodes and initialize the priority queue with the source node.
+3. While the priority queue is not empty, extract the node with the minimum distance from the queue.
+4. For each neighboring node of the extracted node, calculate the tentative distance and update the distance if it is less than the current distance.
+5. Mark the extracted node as visited and remove it from the list of unvisited nodes.
+6. Repeat steps 3-5 until the destination node is reached.
+
+Q3. (15 marks) Compare and contrast Dijkstra's Algorithm with Breadth-First Search (BFS).
+Answer: Both Dijkstra's Algorithm and BFS are graph search algorithms used to find the shortest path between two nodes in a graph. However, there are some key differences between the two:
+
+* Dijkstra's Algorithm is used for finding the shortest path in a weighted graph, while BFS is used for finding the shortest path in an unweighted graph.
+* Dijkstra's Algorithm uses a priority queue to select the next node to visit, while BFS uses a queue to select the next node to visit.
+* Dijkstra's Algorithm has a higher time complexity than BFS, but it provides a more optimal solution.
+
+Q4. (2 marks) What is the time complexity of Dijkstra's Algorithm?
+Answer: The time complexity of Dijkstra's Algorithm is O(|E|log|V|) in the worst case, where |E| is the number of edges and |V| is the number of vertices.
+
+Q5. (13 marks) Explain the advantages and disadvantages of Dijkstra's Algorithm.
+Answer: The advantages of Dijkstra's Algorithm include:
+
+* It provides optimal solutions for single-source shortest path problems.
+* It is easy to implement and understand.
+* It can be applied to both directed and undirected graphs.
+
+The disadvantages of Dijkstra's Algorithm include:
+
+* It has a high time complexity of O(|E|log|V|) in the worst case.
+* It requires a lot of memory to store the priority queue and the distances to each node.
+
+## MCQs
+
+Q1. What is the purpose of Dijkstra's Algorithm?
+a) To find the shortest path between two nodes in a graph.
+b) To find the longest path between two nodes in a graph.
+c) To find the shortest cycle in a graph.
+d) To find the longest cycle in a graph.
+
+Answer: a) To find the shortest path between two nodes in a graph.
+
+Q2. What is the time complexity of Dijkstra's Algorithm?
+a) O(|E|) in the worst case
+b) O(|E|log|V|) in the worst case
+c) O(|V|) in the worst case
+d) O(|E|V|) in the worst case
+
+Answer: b) O(|E|log|V|) in the worst case
+
+Q3. What is the space complexity of Dijkstra's Algorithm?
+a) O(|V|) in the worst case
+b) O(|E|) in the worst case
+c) O(|V| + |E|) in the worst case
+d) O(|E|V|) in the worst case
+
+Answer: c) O(|V| + |E|) in the worst case
+
+Q4. What is the purpose of a priority queue in Dijkstra's Algorithm?
+a) To store the distances to each node.
+b) To store the shortest path between two nodes.
+c) To store the nodes with the minimum distance.
+d) To store the nodes with the maximum distance.
+
+Answer: c) To store the nodes with the minimum distance.
+
+Q5. What is the disadvantage of using Dijkstra's Algorithm?
+a) It has a low time complexity.
+b) It has a high time complexity.
+c) It requires a lot of memory.
+d) It provides a suboptimal solution.
+
+Answer: b) It has a high time complexity.
+
+## YOUTUBE LINKS
+
+- [Dijkstra's Algorithm Tutorial](https://www.youtube.com/results?search_query=dijkstra%27s+algorithm+tutorial)
+- [Dijkstra's Algorithm Explanation](https://www.youtube.com/results?search_query=dijkstra%27s+algorithm+explanation)
+- [Dijkstra's Algorithm Implementation](https://www.youtube.com/results?search_query=dijkstra%27s+algorithm+implementation)
+- [Dijkstra's Algorithm Applications](https://www.youtube.com/results?search_query=dijkstra%27s+algorithm+applications)
+- [Dijkstra's Algorithm Time Complexity](https://www.youtube.com/results?search_query=dijkstra%27s+algorithm+time+complexity)
