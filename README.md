@@ -1,4 +1,4 @@
-# Study Materials Management System
+# Simplified-AI-powered-study-material-generation-using-LLM
 
 A comprehensive web-based platform for managing academic study materials, courses, and student uploads with role-based access control for administrators, faculty, and students.
 
