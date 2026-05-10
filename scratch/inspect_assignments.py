@@ -1,0 +1,13 @@
+import sqlite3
+conn = sqlite3.connect('students.db')
+c = conn.cursor()
+print('Faculty:')
+c.execute('SELECT id, name, username FROM faculty')
+for r in c.fetchall(): print(r)
+print('\nAssignments:')
+c.execute('SELECT faculty_id, subject_id FROM faculty_subject')
+for r in c.fetchall(): print(r)
+print('\nSubjects:')
+c.execute('SELECT id, subject_code, subject_name, department, year, semester FROM subject')
+for r in c.fetchall(): print(r)
+conn.close()
