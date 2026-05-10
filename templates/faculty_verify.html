@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verification Queue - Faculty</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .navbar {
+      height: 72px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar-brand {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .navbar-brand span {
+      color: #10b981;
+    }
+
+    .nav-badge {
+      background: #f0fdf4;
+      color: #10b981;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      border: 1px solid #dcfce7;
+    }
+
+    .navbar-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .navbar-links a {
+      color: #475569;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .navbar-links a:hover,
+    .navbar-links a.active {
+      color: #10b981;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .header {
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      text-align: left;
+      padding: 12px 16px;
+      color: #64748b;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    td {
+      padding: 16px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+      color: #475569;
+    }
+
+    .topic-name {
+      font-weight: 700;
+      color: #0f172a;
+      font-size: 15px;
+    }
+
+    .subject-info {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    .student-badge {
+      background: #eff6ff;
+      color: #2563eb;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid #dbeafe;
+    }
+
+    .btn-verify {
+      background: #10b981;
+      color: #ffffff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-verify:hover {
+      background: #059669;
+    }
+
+    .btn-view {
+      background: #f1f5f9;
+      color: #475569;
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      margin-right: 8px;
+      border: 1px solid #e2e8f0;
+      transition: 0.2s;
+    }
+
+    .btn-view:hover {
+      background: #e2e8f0;
+    }
+
+    .badge-pending {
+      color: #92400e;
+      background: #fffbeb;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      border: 1px solid #fef3c7;
+    }
+
+    .badge-verified {
+      color: #166534;
+      background: #f0fdf4;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      border: 1px solid #dcfce7;
+    }
+
+    .badge-rejected {
+      color: #991b1b;
+      background: #fef2f2;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      border: 1px solid #fee2e2;
+    }
+
+    /* Modal Styling */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-content {
+      background-color: #ffffff;
+      margin: 10% auto;
+      padding: 32px;
+      border: 1px solid #e2e8f0;
+      width: 440px;
+      border-radius: 16px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-header {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      color: #0f172a;
+    }
+
+    .modal-body textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #1e293b;
+      border: 1px solid #e2e8f0;
+      font-family: inherit;
+      resize: none;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .modal-body textarea:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #475569;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .btn-danger {
+      background: #dc2626;
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+    }
+  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='light-theme.css') }}">
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-brand">📚 Study<span>Material</span> <span class="nav-badge">FACULTY</span></div>
+    <div class="navbar-links">
+      <a href="/faculty">🏠 Dashboard</a>
+      <a href="/faculty/verify" class="active">✅ Verification Queue</a>
+
+      <a href="/faculty/logout">🚪 Logout</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="header">
+      <h1>Verification Queue ⏳</h1>
+      <p>Review and validate AI-generated materials for your assigned subjects.</p>
+    </div>
+
+    <div class="card"
+      style="display: flex; justify-content: space-between; align-items: center; padding: 24px 40px; margin-bottom: 32px;">
+      <div>
+        <h3 style="font-size: 18px; color: #182230;">📊 Your Verification Progress</h3>
+        <p style="color: #5f6f86; font-size: 14px; margin-top: 4px;">Track your contributions to the academic vault.</p>
+      </div>
+      <div style="display: flex; align-items: center; gap: 32px;">
+        <div style="text-align: center;">
+          <div style="font-size: 32px; font-weight: 800; color: #10b981;">{{ stats_verified }}</div>
+          <div
+            style="font-size: 11px; color: #5f6f86; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
+            Verified</div>
+        </div>
+        <div style="text-align: center; border-left: 1px solid #e5ebf4; padding-left: 32px;">
+          <div style="font-size: 32px; font-weight: 800; color: #818cf8;">{{ pending_items|length }}</div>
+          <div
+            style="font-size: 11px; color: #5f6f86; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
+            Pending</div>
+        </div>
+      </div>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div
+      style="background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 16px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(16, 185, 129, 0.2); font-weight: 600;">
+      {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="card">
+      {% if pending_items %}
+      <table>
+        <thead>
+          <tr>
+            <th>Content Details</th>
+            <th>Requested By</th>
+            <th>Status</th>
+            <th style="text-align: right;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in pending_items %}
+          <tr>
+            <td>
+              <div class="topic-name">{{ item.topic }}</div>
+              <div class="subject-info">{{ item.subject }} | {{ item.semester }}</div>
+            </td>
+            <td><span class="student-badge">{{ item.student.name }}</span></td>
+            <td>
+              {% if item.status == 'pending' %}
+              <span class="badge-pending">Pending</span>
+              {% elif item.status == 'verified' %}
+              <span class="badge-verified">Verified</span>
+              {% elif item.status == 'rejected' %}
+              <span class="badge-rejected">Rejected</span>
+              {% endif %}
+            </td>
+            <td style="text-align: right; display: flex; gap: 8px; justify-content: flex-end;">
+              <a href="/history/{{ item.id }}" class="btn-view" target="_blank">👁️ Preview</a>
+              <a href="/faculty/edit/{{ item.id }}" class="btn-view"
+                style="background: rgba(129, 140, 248, 0.1); color: #818cf8;">✏️ Edit</a>
+              <a href="/faculty/approve/{{ item.id }}" class="btn-verify"
+                onclick="return confirm('Do you verify that this AI content is accurate?')">✅ Approve</a>
+              <button onclick="openRejectModal({{ item.id }}, '{{ item.topic }}')" class="btn-view"
+                style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: none; cursor: pointer;">❌
+                Reject</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-state">
+        <h3 style="color: #10b981;">🎉 All Caught Up!</h3>
+        <p style="color: #6b7c93; margin-top: 10px;">There are no new AI-generated materials pending review for your
+          subjects.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div id="rejectModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">Reject Content</div>
+      <form id="rejectForm" method="POST">
+        <div class="modal-body">
+          <p id="rejectTopic" style="color: #5f6f86; font-size: 14px; margin-bottom: 12px;"></p>
+          <textarea name="reason"
+            placeholder="Explain why this content is being rejected (e.g. incorrect formulas, missing diagrams)..."
+            rows="4" required></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" onclick="closeRejectModal()">Cancel</button>
+          <button type="submit" class="btn-danger">Confirm Rejection</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function openRejectModal(id, topic) {
+      const modal = document.getElementById('rejectModal');
+      const form = document.getElementById('rejectForm');
+      const topicText = document.getElementById('rejectTopic');
+
+      form.action = '/faculty/reject/' + id;
+      topicText.innerText = 'Topic: ' + topic;
+      modal.style.display = 'block';
+    }
+
+    function closeRejectModal() {
+      document.getElementById('rejectModal').style.display = 'none';
+    }
+
+    window.onclick = function (event) {
+      if (event.target == document.getElementById('rejectModal')) {
+        closeRejectModal();
+      }
+    }
+
+
+  </script>
+
+</body>
+
+</html>

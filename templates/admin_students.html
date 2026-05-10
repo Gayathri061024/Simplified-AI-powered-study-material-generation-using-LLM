@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Directory - Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: 'Plus Jakarta Sans', sans-serif; 
+      background: #f8fafc; 
+      min-height: 100vh; 
+      color: #1e293b; 
+      position: relative;
+    }
+
+    .navbar { 
+      background: #ffffff;
+      padding: 0 40px; height: 72px; display: flex; align-items: center; justify-content: space-between; 
+      border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100;
+    }
+    .navbar-brand { font-size: 22px; font-weight: 800; color: #0f172a; letter-spacing: -0.5px; display: flex; align-items: center; }
+    .navbar-brand span { color: #2563eb; }
+    .nav-badge { 
+      background: #ef4444; color: #ffffff; padding: 4px 10px; 
+      border-radius: 8px; font-size: 11px; margin-left: 12px; font-weight: 800; letter-spacing: 0.5px; 
+    }
+    
+    .navbar-links { display: flex; gap: 8px; }
+    .navbar-links a { 
+      color: #5f6f86; text-decoration: none; font-size: 14px; font-weight: 600; padding: 10px 18px; 
+      border-radius: 14px; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .navbar-links a:hover { background: #e5ebf4; color: #182230; }
+    .navbar-links a.active { background: rgba(99, 102, 241, 0.1); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.2); }
+    
+    .container { max-width: 1240px; margin: 0 auto; padding: 40px 20px 60px; }
+    
+    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+    .page-title { font-size: 28px; font-weight: 800; letter-spacing: -1px; color: #0f172a; margin: 0; }
+    .count-badge { background: #f1f5f9; padding: 8px 18px; border-radius: 20px; font-size: 12px; font-weight: 600; color: #475569; border: 1px solid #e2e8f0; }
+    
+    .card { background: #ffffff; border-radius: 16px; padding: 32px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+    
+    table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; }
+    th { color: #64748b; padding: 12px 16px; font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; border-bottom: 1px solid #f1f5f9; text-align: left; }
+    td { padding: 16px; border-bottom: 1px solid #f1f5f9; color: #475569; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    
+    .tag { 
+      padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; 
+      display: inline-flex; align-items: center; gap: 6px; 
+    }
+    .tag-blue { background: #eff6ff; color: #2563eb; border: 1px solid #dbeafe; }
+    .tag-gray { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+    
+    .student-name { font-weight: 700; color: #0f172a; font-size: 15px; }
+    .student-email { font-size: 13px; color: #64748b; }
+    
+    .btn-danger { 
+      padding: 8px 16px; background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; 
+      border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; 
+      transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-danger:hover { background: #fee2e2; }
+    
+    @media (max-width: 640px) { .navbar { padding: 0 20px; } .page-header { flex-direction: column; align-items: flex-start; gap: 12px; } }
+  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='light-theme.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-brand">📚 Study<span>Material</span> <span class="nav-badge">ADMIN</span></div>
+  <div class="navbar-links">
+    <a href="/admin"><span>🏠</span> Dashboard</a>
+    <a href="/admin/students" class="active"><span>👥</span> Students</a>
+    <a href="/admin/history"><span>📋</span> History</a>
+    <a href="/admin/faculty"><span>🎓</span> Faculty</a>
+    <a href="/admin/logout"><span>🚪</span> Logout</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <h1 class="page-title">👥 Registered Students</h1>
+    <div class="count-badge">Total Database: {{ students|length }} Entries</div>
+  </div>
+  
+  <div class="card">
+    <div style="overflow-x: auto;">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 60px;">#</th>
+            <th>Personnel Identity</th>
+            <th>Roll Number</th>
+            <th>Department</th>
+            <th>Year</th>
+            <th style="text-align: right;">System Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for student in students %}
+          <tr>
+            <td style="color:#4b5563; font-weight:800;">{{ loop.index }}</td>
+            <td>
+              <div class="student-name">{{ student.name }}</div>
+              <div class="student-email">{{ student.email }}</div>
+            </td>
+            <td><span class="tag tag-blue">{{ student.roll_no }}</span></td>
+            <td>
+              {% if student.department %}
+                <span class="tag tag-gray">{{ student.department }}</span>
+              {% else %}
+                <span class="tag" style="background: #f1f5f9; color: #94a3b8; border: 1px dashed #cbd5e1;">Dept not set</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if student.year %}
+                <span style="color: #475569; font-weight: 700;">{{ student.year }}</span>
+              {% else %}
+                <span style="color: #94a3b8; font-size: 13px; font-style: italic;">Year not set</span>
+              {% endif %}
+            </td>
+            <td style="text-align: right;">
+              <a class="btn-danger" href="/admin/students/delete/{{ student.id }}" onclick="return confirm('Permanently decommission {{ student.name }} from the platform?')">
+                <span>🗑</span> Remove Access
+              </a>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="6" style="text-align:center; padding: 60px; color:#4b5563; font-size: 15px;">No students have registered on the platform yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+
+
+

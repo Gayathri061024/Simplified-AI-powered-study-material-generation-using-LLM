@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Material Repository - {% if session.get('faculty_logged_in') %}Faculty{% else %}Admin{% endif %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: 'Plus Jakarta Sans', sans-serif; 
+      background: #f8fafc; 
+      min-height: 100vh; 
+      color: #1e293b; 
+      position: relative;
+    }
+
+    .navbar { 
+      background: #ffffff;
+      padding: 0 40px; height: 72px; display: flex; align-items: center; justify-content: space-between; 
+      border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100;
+    }
+    .navbar-brand { font-size: 22px; font-weight: 800; color: #0f172a; letter-spacing: -0.5px; display: flex; align-items: center; }
+    .navbar-brand span { color: #2563eb; }
+    .nav-badge { 
+      color: #ffffff; padding: 4px 10px; 
+      border-radius: 8px; font-size: 11px; margin-left: 12px; font-weight: 800; letter-spacing: 0.5px; 
+    }
+    .nav-badge-admin { background: #ef4444; }
+    .nav-badge-faculty { background: #10b981; }
+    
+    .navbar-links { display: flex; gap: 8px; }
+    .navbar-links a { 
+      color: #475569; text-decoration: none; font-size: 14px; font-weight: 600; padding: 10px 18px; 
+      border-radius: 8px; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .navbar-links a:hover { background: #f1f5f9; color: #0f172a; }
+    .navbar-links a.active { background: #eff6ff; color: #2563eb; border: 1px solid #dbeafe; }
+    
+    .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px 60px; }
+    .page-title { font-size: 28px; font-weight: 800; margin-bottom: 32px; letter-spacing: -1px; color: #182230; text-align: center; }
+    
+    /* Premium Tabs */
+    .tabs { 
+        display: flex; gap: 8px; margin-bottom: 32px; background: #ffffff; 
+        padding: 8px; border-radius: 20px; border: 1px solid #e5ebf4; 
+        
+    }
+    .tabs { 
+        display: flex; gap: 8px; margin-bottom: 32px; background: #ffffff; 
+        padding: 8px; border-radius: 12px; border: 1px solid #e2e8f0; 
+    }
+    .tab { 
+        flex: 1; text-align: center; padding: 12px; border-radius: 8px; font-weight: 700; 
+        color: #64748b; cursor: pointer; transition: all 0.2s; 
+        font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .tab:hover { background: #f8fafc; color: #0f172a; }
+    .tab.active { background: #eff6ff; color: #2563eb; border: 1px solid #dbeafe; }
+    
+    .upload-card { 
+        background: #ffffff; border-radius: 16px; 
+        padding: 40px; border: 1px solid #e2e8f0; display: none; 
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .upload-card.active { display: block; }
+    
+    .upload-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 24px; color: #0f172a; display: flex; align-items: center; gap: 12px; }
+    
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .form-group { margin-bottom: 24px; }
+    label { display: block; font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    
+    select, input[type=text], input[type=file] { 
+        width: 100%; padding: 12px 16px; background: #ffffff; border: 1px solid #e2e8f0; 
+        border-radius: 8px; color: #1e293b; font-size: 15px; font-family: inherit; transition: all 0.2s;
+    }
+    select:focus, input[type=text]:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+    
+    input[type=file] { padding: 10px 12px; cursor: pointer; }
+    input[type=file]::file-selector-button { 
+        background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; 
+        padding: 6px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; margin-right: 12px; transition: 0.2s;
+    }
+    input[type=file]::file-selector-button:hover { background: #e2e8f0; }
+    
+    .btn { 
+        width: 100%; padding: 14px; color: #ffffff; border: none; border-radius: 8px; 
+        font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; 
+        display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 12px;
+    }
+    .btn-notes { background: #2563eb; }
+    .btn-pyq { background: #10b981; }
+    .btn-syll { background: #7c3aed; }
+    .btn-qb { background: #e11d48; }
+    
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    
+    .alert { padding: 16px 24px; border-radius: 12px; font-size: 14px; margin-bottom: 32px; font-weight: 600; display: flex; align-items: center; gap: 12px; }
+    .success { background: #f0fdf4; color: #166534; border: 1px solid #dcfce7; }
+    .error { background: #fef2f2; color: #991b1b; border: 1px solid #fee2e2; }
+    
+    .current-files { margin-top: 40px; background: #f8fafc; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0; }
+    .current-files h4 { font-size: 14px; color: #0f172a; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 800; }
+    
+    .file-item { 
+        display: flex; justify-content: space-between; align-items: center; padding: 16px; 
+        background: #ffffff; border: 1px solid #e2e8f0; 
+        border-radius: 12px; margin-bottom: 8px; transition: 0.2s;
+    }
+    .file-item:hover { border-color: #3b82f6; }
+    .file-info { display: flex; align-items: center; gap: 12px; }
+    .file-icon { 
+        font-size: 18px; width: 40px; height: 40px; background: #eff6ff; 
+        border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #2563eb;
+    }
+    .file-name { font-weight: 700; color: #0f172a; font-size: 14px; }
+    
+    .actions { display: flex; gap: 8px; }
+    .btn-sm { 
+        padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; 
+        cursor: pointer; transition: 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-sm-view { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+    .btn-sm-view:hover { background: #eff6ff; color: #2563eb; border-color: #dbeafe; }
+    .btn-sm-danger { background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }
+    .btn-sm-danger:hover { background: #fee2e2; }
+    
+    @media (max-width: 768px) { .navbar { padding: 0 20px; } .grid2 { grid-template-columns: 1fr; } .tabs { flex-wrap: wrap; } }
+  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='light-theme.css') }}">
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-brand">📚 Study<span>Material</span> 
+    <span class="nav-badge {% if session.get('faculty_logged_in') %}nav-badge-faculty{% else %}nav-badge-admin{% endif %}">
+      {% if session.get('faculty_logged_in') %}FACULTY{% else %}ADMIN{% endif %}
+    </span>
+  </div>
+  <div class="navbar-links">
+    {% if session.get('faculty_logged_in') %}
+      <a href="/faculty"><span>🏠</span> Dashboard</a>
+    {% else %}
+      <a href="/admin"><span>🏠</span> Dashboard</a>
+    {% endif %}
+    {% if not session.get('faculty_logged_in') %}
+      <a href="/admin/upload" class="active"><span>📤</span> Upload</a>
+    {% endif %}
+    {% if session.get('faculty_logged_in') %}
+      <a href="/faculty/logout"><span>🚪</span> Logout</a>
+    {% else %}
+      <a href="/admin/logout"><span>🚪</span> Logout</a>
+    {% endif %}
+  </div>
+</nav>
+
+<div class="container">
+  <h1 class="page-title">📂 Material Upload</h1>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="alert {% if 'Error' in messages[0] or 'No file' in messages[0] %}error{% else %}success{% endif %}">
+        ✨ {{ messages[0] }}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="tabs">
+    <button class="tab {% if active_tab == 'notes' or not active_tab %}active{% endif %}" onclick="switchTab('notes', this)"><span>📝</span> Notes</button>
+    <button class="tab {% if active_tab == 'pyq' %}active{% endif %}" onclick="switchTab('pyq', this)"><span>📜</span> PYQ Archive</button>
+    <button class="tab {% if active_tab == 'syllabus' %}active{% endif %}" onclick="switchTab('syllabus', this)"><span>📘</span> Syllabus</button>
+    <button class="tab {% if active_tab == 'qb' %}active{% endif %}" onclick="switchTab('qb', this)"><span>📋</span> Question Bank</button>
+  </div>
+
+  <!-- NOTES UPLOAD -->
+  <div class="upload-card {% if active_tab == 'notes' or not active_tab %}active{% endif %}" id="tab-notes">
+    <h3><span>📝</span> Upload Notes</h3>
+    <form action="/admin/upload/notes" method="POST" enctype="multipart/form-data" class="upload-form" data-type="notes">
+
+      {% if session.get('faculty_logged_in') and assigned_subject %}
+        <div class="alert success" style="margin-bottom: 24px; padding: 16px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;">
+          <strong style="color: #166534; font-size: 16px;">{{ assigned_subject.subject_code }} - {{ assigned_subject.subject_name }}</strong><br>
+          <span style="color: #15803d; font-size: 13px;">{{ assigned_subject.department }} • {{ assigned_subject.year }} • {{ assigned_subject.semester }}</span>
+        </div>
+        <input type="hidden" name="course_level" class="level-select" value="{{ assigned_subject.course_level }}">
+        <input type="hidden" name="regulation" class="reg-select" value="R2021">
+        <input type="hidden" name="department" class="dept-select" value="{{ assigned_subject.department }}">
+        <input type="hidden" name="year" class="year-select" value="{{ assigned_subject.year }}">
+        <input type="hidden" name="semester" class="sem-select" value="{{ assigned_subject.semester }}">
+        <input type="hidden" name="subject_code" class="sub-code" value="{{ assigned_subject.subject_code }}">
+      {% else %}
+      <div class="grid2">
+        <div class="form-group">
+          <label>Course Level</label>
+          <select name="course_level" class="level-select" required>
+            <option value="UG">UG (Undergraduate)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Regulation Framework</label>
+          <select name="regulation" class="reg-select" required>
+            <option value="">Select Regulation</option>
+            <option value="R2021">R2021 (Current)</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="form-group">
+          <label>Department</label>
+          <select name="department" class="dept-select" required>
+            <option value="">Select Dept</option>
+            <option value="CSE">CSE (Computer Science)</option>
+            <option value="IT">IT (Information Tech)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Year</label>
+          <select name="year" class="year-select" required>
+            <option value="">Select Academic Year</option>
+            <option value="1st Year">1st Year</option>
+            <option value="2nd Year">2nd Year</option>
+            <option value="3rd Year">3rd Year</option>
+            <option value="4th Year">4th Year</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="form-group">
+          <label>Semester</label>
+          <select name="semester" class="sem-select" required>
+            <option value="">Select Semester</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Subject Logic</label>
+          <select name="subject_code" class="sub-code" required>
+            <option value="">Configuration pending...</option>
+          </select>
+        </div>
+      </div>
+      {% endif %}
+      <div class="form-group">
+
+        <input type="file" name="pdf_file" accept=".pdf" required>
+      </div>
+      <button class="btn btn-notes" type="submit">Upload Notes →</button>
+    </form>
+    <div class="current-files" id="files-notes" style="display:none;"></div>
+  </div>
+
+  <!-- PYQ UPLOAD -->
+  <div class="upload-card {% if active_tab == 'pyq' %}active{% endif %}" id="tab-pyq">
+    <h3><span>📜</span> Upload PYQ</h3>
+    <form action="/admin/upload/pyq" method="POST" enctype="multipart/form-data" class="upload-form" data-type="pyq">
+
+      {% if session.get('faculty_logged_in') and assigned_subject %}
+        <div class="alert success" style="margin-bottom: 24px; padding: 16px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;">
+          <strong style="color: #166534; font-size: 16px;">{{ assigned_subject.subject_code }} - {{ assigned_subject.subject_name }}</strong><br>
+          <span style="color: #15803d; font-size: 13px;">{{ assigned_subject.department }} • {{ assigned_subject.year }} • {{ assigned_subject.semester }}</span>
+        </div>
+        <input type="hidden" name="course_level" class="level-select" value="{{ assigned_subject.course_level }}">
+        <input type="hidden" name="regulation" class="reg-select" value="R2021">
+        <input type="hidden" name="department" class="dept-select" value="{{ assigned_subject.department }}">
+        <input type="hidden" name="year" class="year-select" value="{{ assigned_subject.year }}">
+        <input type="hidden" name="semester" class="sem-select" value="{{ assigned_subject.semester }}">
+        <input type="hidden" name="subject_code" class="sub-code" value="{{ assigned_subject.subject_code }}">
+      {% else %}
+      <div class="grid2">
+        <div class="form-group">
+          <label>Course Level</label>
+          <select name="course_level" class="level-select" required>
+            <option value="UG">UG</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Regulation</label>
+          <select name="regulation" class="reg-select" required>
+            <option value="">Select Regulation</option>
+            <option value="R2021">R2021</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="form-group">
+          <label>Department</label>
+          <select name="department" class="dept-select" required>
+            <option value="">Select Dept</option>
+            <option value="CSE">CSE</option>
+            <option value="IT">IT</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Year</label>
+          <select name="year" class="year-select" required>
+            <option value="">Select Year</option>
+            <option value="1st Year">1st Year</option>
+            <option value="2nd Year">2nd Year</option>
+            <option value="3rd Year">3rd Year</option>
+            <option value="4th Year">4th Year</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="form-group">
+          <label>Semester</label>
+          <select name="semester" class="sem-select" required>
+            <option value="">Select Sem</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Subject Code</label>
+          <select name="subject_code" class="sub-code" required>
+            <option value="">Configuration pending...</option>
+          </select>
+        </div>
+      </div>
+      {% endif %}
+      <div class="form-group">
+
+        <input type="file" name="pdf_file" accept=".pdf" required>
+      </div>
+      <button class="btn btn-pyq" type="submit">Upload PYQ →</button>
+    </form>
+    <div class="current-files" id="files-pyq" style="display:none;"></div>
+  </div>
+
+  <!-- SYLLABUS UPLOAD -->
+  <div class="upload-card {% if active_tab == 'syllabus' %}active{% endif %}" id="tab-syllabus">
+    <h3><span>📘</span> Upload Syllabus</h3>
+    <form action="/admin/upload/syllabus" method="POST" enctype="multipart/form-data" class="upload-form" data-type="syllabus">
+
+      {% if session.get('faculty_logged_in') and assigned_subject %}
+        <div class="alert success" style="margin-bottom: 24px; padding: 16px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;">
+          <strong style="color: #166534; font-size: 16px;">{{ assigned_subject.subject_code }} - {{ assigned_subject.subject_name }}</strong><br>
+          <span style="color: #15803d; font-size: 13px;">{{ assigned_subject.department }} • {{ assigned_subject.year }} • {{ assigned_subject.semester }}</span>
+        </div>
+        <input type="hidden" name="course_level" class="level-select" value="{{ assigned_subject.course_level }}">
+        <input type="hidden" name="regulation" class="reg-select" value="R2021">
+        <input type="hidden" name="department" class="dept-select" value="{{ assigned_subject.department }}">
+        <input type="hidden" name="year" class="year-select" value="{{ assigned_subject.year }}">
+        <input type="hidden" name="semester" class="sem-select" value="{{ assigned_subject.semester }}">
+        <input type="hidden" name="subject_code" class="sub-code" value="{{ assigned_subject.subject_code }}">
+      {% else %}
+      <div class="grid2">
+        <div class="form-group">
+          <label>Course Level</label>
+          <select name="course_level" class="level-select" required>
+            <option value="UG">UG</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Regulation</label>
+          <select name="regulation" class="reg-select" required>
+            <option value="">Select Regulation</option>
+            <option value="R2021">R2021</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="form-group">
+          <label>Department</label>
+          <select name="department" class="dept-select" required>
+            <option value="">Select Dept</option>
+            <option value="CSE">CSE</option>
+            <option value="IT">IT</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Year</label>
+          <select name="year" class="year-select" required>
+            <option value="">Select Year</option>
+            <option value="1st Year">1st Year</option>
+            <option value="2nd Year">2nd Year</option>
+            <option value="3rd Year">3rd Year</option>
+            <option value="4th Year">4th Year</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="form-group">
+          <label>Semester</label>
+          <select name="semester" class="sem-select" required>
+            <option value="">Select Sem</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Subject Code</label>
+          <select name="subject_code" class="sub-code" required>
+            <option value="">Configuration pending...</option>
+          </select>
+        </div>
+      </div>
+      {% endif %}
+      <div class="form-group">
+
+        <input type="file" name="pdf_file" accept=".pdf" required>
+      </div>
+      <button class="btn btn-syll" type="submit">Upload Syllabus →</button>
+    </form>
+    <div class="current-files" id="files-syllabus" style="display:none;"></div>
+  </div>
+
+  <!-- QUESTION BANK UPLOAD -->
+  <div class="upload-card {% if active_tab == 'qb' %}active{% endif %}" id="tab-qb">
+    <h3><span>📋</span> Upload Question Bank</h3>
+    <form action="/admin/upload/question_bank" method="POST" enctype="multipart/form-data" class="upload-form" data-type="question_bank">
+
+      {% if session.get('faculty_logged_in') and assigned_subject %}
+        <div class="alert success" style="margin-bottom: 24px; padding: 16px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;">
+          <strong style="color: #166534; font-size: 16px;">{{ assigned_subject.subject_code }} - {{ assigned_subject.subject_name }}</strong><br>
+          <span style="color: #15803d; font-size: 13px;">{{ assigned_subject.department }} • {{ assigned_subject.year }} • {{ assigned_subject.semester }}</span>
+        </div>
+        <input type="hidden" name="course_level" class="level-select" value="{{ assigned_subject.course_level }}">
+        <input type="hidden" name="regulation" class="reg-select" value="R2021">
+        <input type="hidden" name="department" class="dept-select" value="{{ assigned_subject.department }}">
+        <input type="hidden" name="year" class="year-select" value="{{ assigned_subject.year }}">
+        <input type="hidden" name="semester" class="sem-select" value="{{ assigned_subject.semester }}">
+        <input type="hidden" name="subject_code" class="sub-code" value="{{ assigned_subject.subject_code }}">
+      {% else %}
+      <div class="grid2">
+        <div class="form-group">
+          <label>Course Level</label>
+          <select name="course_level" class="level-select" required>
+            <option value="UG">UG</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Regulation</label>
+          <select name="regulation" class="reg-select" required>
+            <option value="">Select Regulation</option>
+            <option value="R2021">R2021</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="form-group">
+          <label>Department</label>
+          <select name="department" class="dept-select" required>
+            <option value="">Select Dept</option>
+            <option value="CSE">CSE</option>
+            <option value="IT">IT</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Year</label>
+          <select name="year" class="year-select" required>
+            <option value="">Select Year</option>
+            <option value="1st Year">1st Year</option>
+            <option value="2nd Year">2nd Year</option>
+            <option value="3rd Year">3rd Year</option>
+            <option value="4th Year">4th Year</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="form-group">
+          <label>Semester</label>
+          <select name="semester" class="sem-select" required>
+            <option value="">Select Sem</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Subject Code</label>
+          <select name="subject_code" class="sub-code" required>
+            <option value="">Configuration pending...</option>
+          </select>
+        </div>
+      </div>
+      {% endif %}
+      <div class="form-group">
+
+        <input type="file" name="pdf_file" accept=".pdf" required>
+      </div>
+      <button class="btn btn-qb" type="submit">Upload Question Bank →</button>
+    </form>
+    <div class="current-files" id="files-question_bank" style="display:none;"></div>
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.upload-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-' + tabId).classList.add('active');
+}
+
+const adminSemesterMap = {
+  '1st Year': [['Semester 1', 'Semester 1'], ['Semester 2', 'Semester 2']],
+  '2nd Year': [['Semester 3', 'Semester 3'], ['Semester 4', 'Semester 4']],
+  '3rd Year': [['Semester 5', 'Semester 5'], ['Semester 6', 'Semester 6']],
+  '4th Year': [['Semester 7', 'Semester 7'], ['Semester 8', 'Semester 8']]
+};
+
+document.querySelectorAll('.year-select').forEach(yearSelect => {
+  yearSelect.addEventListener('change', function() {
+    const form = this.closest('form');
+    const semSelect = form.querySelector('.sem-select');
+    
+    semSelect.innerHTML = '<option value="">Select Semester</option>';
+    if (adminSemesterMap[this.value]) {
+      adminSemesterMap[this.value].forEach(([val, label]) => {
+        const opt = document.createElement('option');
+        opt.value = val;
+        opt.textContent = label;
+        semSelect.appendChild(opt);
+      });
+    }
+  });
+});
+
+document.querySelectorAll('.upload-form').forEach(form => {
+  const deptSelect = form.querySelector('.dept-select');
+  const levelSelect = form.querySelector('.level-select');
+  const yearSelect = form.querySelector('.year-select');
+  const semSelect = form.querySelector('.sem-select');
+  const codeSelect = form.querySelector('.sub-code');
+
+  const updateSub = () => loadSubjects(form);
+  deptSelect.addEventListener('change', updateSub);
+  levelSelect.addEventListener('change', updateSub);
+  yearSelect.addEventListener('change', updateSub);
+  semSelect.addEventListener('change', updateSub);
+  codeSelect.addEventListener('change', () => fetchCurrentFiles(form));
+});
+
+function loadSubjects(form) {
+  const level = form.querySelector(".level-select").value;
+  const dept = form.querySelector(".dept-select").value;
+  const year = form.querySelector(".year-select").value;
+  const sem = form.querySelector(".sem-select").value;
+  const select = form.querySelector(".sub-code");
+  const listDiv = form.closest(".upload-card").querySelector(".current-files");
+
+  if (!dept || !year || !sem) return;
+
+  select.innerHTML = '<option value="">Loading...</option>';
+
+  // Role check for filtering
+  const isFaculty = "{{ session.get('faculty_logged_in') }}" === "True";
+  const facultyId = "{{ session.get('faculty_id') }}";
+
+  fetch("/admin/get_subjects", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: `course_level=${level}&department=${dept}&year=${encodeURIComponent(year)}&semester=${encodeURIComponent(sem)}&is_faculty=${isFaculty}&faculty_id=${facultyId}`
+  })
+    .then(res => res.json())
+    .then(subjects => {
+      select.innerHTML = '<option value="">Select Subject</option>';
+      subjects.forEach(sub => {
+        const opt = document.createElement("option");
+        opt.value = sub.code;
+        opt.textContent = `${sub.code} - ${sub.name}`;
+        select.appendChild(opt);
+      });
+      listDiv.style.display = "none";
+    });
+}
+
+function fetchCurrentFiles(form) {
+  const level = form.querySelector('.level-select').value;
+  const dept = form.querySelector('.dept-select').value;
+  const year = form.querySelector('.year-select').value;
+  const sem  = form.querySelector('.sem-select').value;
+  const code = form.querySelector('.sub-code').value;
+  const type = form.dataset.type;
+  
+  const filesContainer = document.getElementById('files-' + type);
+  
+  if(dept && year && sem && code) {
+    const reg = form.querySelector('.reg-select').value;
+    const data = new URLSearchParams();
+    data.append('course_level', level);
+    data.append('regulation', reg);
+    data.append('department', dept);
+    data.append('year', year);
+    data.append('semester', sem);
+    data.append('subject_code', code);
+    data.append('file_type', type);
+    
+    fetch('/admin/list_files', {
+      method: 'POST',
+      body: data
+    })
+    .then(r => r.json())
+    .then(data => {
+      if(data.files && data.files.length > 0) {
+        filesContainer.style.display = 'block';
+        let typeLabels = {
+          'notes': 'Notes Document',
+          'pyq': 'Previous Year QP',
+          'syllabus': 'Syllabus PDF',
+          'question_bank': 'Question Bank PDF'
+        };
+        let label = typeLabels[type] || 'Document';
+        
+        let deletePrefix = 'delete_material';
+        let viewPrefix = 'view_' + type;
+        
+        let html = `<h4>📄 Current Subject Assets (${data.files.length})</h4>`;
+        data.files.forEach(f => {
+          let numDisplay = data.files.length > 1 ? ` #${f.index}` : '';
+          
+          let delUrl = `/admin/${deletePrefix}/${type}/${encodeURIComponent(dept)}/${encodeURIComponent(level)}/${encodeURIComponent(reg)}/${encodeURIComponent(year)}/${encodeURIComponent(sem)}/${encodeURIComponent(code)}/${f.index}`;
+          let viewUrl = `/${viewPrefix}/${encodeURIComponent(dept)}/${encodeURIComponent(level)}/${encodeURIComponent(reg)}/${encodeURIComponent(year)}/${encodeURIComponent(sem)}/${encodeURIComponent(code)}/${f.index}`;
+
+          html += `
+          <div class="file-item">
+            <div class="file-info">
+              <div class="file-icon">📁</div>
+              <div class="file-name">${label}${numDisplay}</div>
+            </div>
+            <div class="actions">
+              <a href="${viewUrl}" target="_blank" class="btn-sm btn-sm-view"><span>👁</span> View</a>
+              <form action="${delUrl}" method="POST" style="display:inline;" onsubmit="return confirm('Release this asset from storage?');">
+                <button type="submit" class="btn-sm btn-sm-danger"><span>🗑</span> Delete</button>
+              </form>
+            </div>
+          </div>
+          `;
+        });
+        filesContainer.innerHTML = html;
+      } else {
+        filesContainer.style.display = 'none';
+        filesContainer.innerHTML = '';
+      }
+    });
+  } else {
+    filesContainer.style.display = 'none';
+  }
+}
+
+// Auto-fill Logic from URL Parameters
+window.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const dept = urlParams.get('dept');
+    const year = urlParams.get('year');
+    const sem = urlParams.get('sem');
+    const code = urlParams.get('code');
+    const level = urlParams.get('level') || 'UG';
+
+    if (dept || year || sem || code) {
+        document.querySelectorAll('.upload-form').forEach(form => {
+            const deptSelect = form.querySelector('.dept-select');
+            const levelSelect = form.querySelector('.level-select');
+            const yearSelect = form.querySelector('.year-select');
+            const semSelect = form.querySelector('.sem-select');
+
+            if (level) levelSelect.value = level;
+            if (dept) deptSelect.value = dept;
+            if (year) {
+                yearSelect.value = year;
+                // Trigger semester population
+                yearSelect.dispatchEvent(new Event('change'));
+            }
+            
+            // Wait a bit for year change to propagate if needed, then set sem
+            setTimeout(() => {
+                if (sem) {
+                    semSelect.value = sem;
+                    // Trigger subject loading
+                    semSelect.dispatchEvent(new Event('change'));
+                }
+                
+                // Finally set code when subjects are loaded
+                if (code) {
+                    const checkInterval = setInterval(() => {
+                        const codeSelect = form.querySelector('.sub-code');
+                        const option = Array.from(codeSelect.options).find(opt => opt.value === code);
+                        if (option) {
+                            codeSelect.value = code;
+                            codeSelect.dispatchEvent(new Event('change'));
+                            clearInterval(checkInterval);
+                        }
+                    }, 100);
+                    // Stop checking after 2 seconds
+                    setTimeout(() => clearInterval(checkInterval), 2000);
+                }
+            }, 100);
+        });
+    }
+
+    // If faculty is logged in and assigned_subject is present, trigger fetchCurrentFiles automatically
+    if ("{{ session.get('faculty_logged_in') }}" === "True" && "{{ assigned_subject.subject_code if assigned_subject else '' }}" !== "") {
+        document.querySelectorAll('.upload-form').forEach(form => {
+            fetchCurrentFiles(form);
+        });
+    }
+});
+
+// Add a clear option next to file inputs so users can delete their selection before uploading
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('input[type="file"]').forEach(input => {
+        let clearBtn = document.createElement('button');
+        clearBtn.type = 'button';
+        clearBtn.innerHTML = '✖ Clear File';
+        clearBtn.style.display = 'none';
+        clearBtn.style.marginLeft = '12px';
+        clearBtn.style.background = '#fef2f2';
+        clearBtn.style.color = '#ef4444';
+        clearBtn.style.border = '1px solid #fca5a5';
+        clearBtn.style.borderRadius = '6px';
+        clearBtn.style.padding = '4px 10px';
+        clearBtn.style.cursor = 'pointer';
+        clearBtn.style.fontSize = '12px';
+        clearBtn.style.fontWeight = 'bold';
+        
+        input.parentNode.insertBefore(clearBtn, input.nextSibling);
+        
+        input.addEventListener('change', function() {
+            clearBtn.style.display = this.files && this.files.length > 0 ? 'inline-block' : 'none';
+        });
+        
+        clearBtn.addEventListener('click', function() {
+            input.value = '';
+            this.style.display = 'none';
+        });
+    });
+});
+</script>
+</body>
+</html>

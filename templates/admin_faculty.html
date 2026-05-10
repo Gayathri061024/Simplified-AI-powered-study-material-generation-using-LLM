@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faculty Management - Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: 'Plus Jakarta Sans', sans-serif; 
+      background: #f8fafc; 
+      min-height: 100vh; 
+      color: #1e293b; 
+      position: relative;
+    }
+
+    .navbar { 
+      background: #ffffff;
+      padding: 0 40px; height: 72px; display: flex; align-items: center; justify-content: space-between; 
+      border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100;
+    }
+    .navbar-brand { font-size: 20px; font-weight: 800; color: #0f172a; }
+    .navbar-brand span { color: #2563eb; }
+    
+    .navbar-links { display: flex; gap: 24px; }
+    .navbar-links a { color: #475569; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.2s; }
+    .navbar-links a:hover { color: #2563eb; }
+
+    .container { max-width: 1240px; margin: 0 auto; padding: 40px 20px; }
+    .header { margin-bottom: 40px; }
+    .header h1 { font-size: 28px; font-weight: 800; letter-spacing: -1px; color: #0f172a; margin-bottom: 8px; }
+    .header p { color: #64748b; font-size: 14px; }
+    
+    .grid2 { display: grid; grid-template-columns: 1fr 1.5fr; gap: 32px; }
+    .card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 32px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+    .card h3 { margin-bottom: 24px; font-size: 18px; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 10px; }
+    
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    input, select { 
+        width: 100%; padding: 12px 16px; background: #ffffff; border: 1px solid #e2e8f0; 
+        border-radius: 8px; color: #1e293b; font-size: 14px; transition: 0.2s; font-family: inherit;
+    }
+    input:focus, select:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+    
+    .btn { 
+        width: 100%; padding: 14px; background: #2563eb; color: #ffffff; border: none; 
+        border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 14px;
+    }
+    .btn:hover { background: #1d4ed8; transform: translateY(-1px); }
+    
+    .table-container { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th { text-align: left; padding: 12px 16px; font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #f1f5f9; }
+    td { padding: 16px; font-size: 14px; border-bottom: 1px solid #f1f5f9; color: #475569; vertical-align: middle; }
+    .faculty-id { font-weight: 700; color: #0f172a; font-size: 15px; }
+    .faculty-user { color: #64748b; font-size: 13px; }
+    
+    .assign-tag { 
+      background: #f8fafc; 
+      border: 1px solid #e2e8f0;
+      color: #64748b; 
+      padding: 8px 12px; 
+      border-radius: 10px; 
+      font-size: 12px; 
+      font-weight: 500; 
+      margin-right: 8px; 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 12px; 
+      margin-bottom: 8px; 
+      line-height: 1.4;
+    }
+    .assign-tag .context { color: #2563eb; font-weight: 800; font-size: 10px; text-transform: uppercase; }
+    .assign-tag .name { color: #0f172a; font-weight: 600; }
+    .delete-assign { color: #dc2626; cursor: pointer; text-decoration: none; font-size: 18px; font-weight: 700; margin-left: 4px; padding: 0 4px; }
+    
+    .subject-checklist {
+      max-height: 200px; overflow-y: auto; background: #f8fafc; border: 1px solid #e2e8f0;
+      border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px;
+    }
+    .subject-item { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 13px; color: #475569; user-select: none; padding: 4px 0; }
+    .subject-item input { width: 16px; height: 16px; cursor: pointer; margin-top: 2px; }
+    .subject-item:hover { color: #0f172a; }
+
+    .alert { padding: 16px; border-radius: 8px; margin-bottom: 24px; font-size: 14px; border: 1px solid #dcfce7; font-weight: 600; }
+    .alert-success { background: #f0fdf4; color: #166534; }
+
+    @media (max-width: 1024px) { .grid2 { grid-template-columns: 1fr; } }
+  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='light-theme.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-brand">📚 Study<span>Material</span> <span class="nav-badge">ADMIN</span></div>
+  <div class="navbar-links">
+    <a href="/admin">🏠 Dashboard</a>
+    <a href="/admin/students">👥 Students</a>
+    <a href="/admin/history">📋 History</a>
+    <a href="/admin/faculty" style="color:#818cf8;">🎓 Faculty</a>
+    <a href="/admin/logout">🚪 Logout</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="header">
+    <h1>🎓 Faculty Management</h1>
+  </div>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}<div class="alert alert-success">✨ {{ messages[0] }}</div>{% endif %}
+  {% endwith %}
+
+  <div class="grid2">
+    <!-- Left: Assignment Form -->
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+      <div class="card" style="background: #fff7ed; border-color: #ffedd5;">
+        <h3 style="color: #9a3412;">📢 Broadcast Selection Window</h3>
+        <p style="font-size: 13px; color: #9a3412; margin-bottom: 20px;">Notify all faculty in a department about the subjects available for selection in a specific semester.</p>
+        
+        <form action="/admin/notify_staff" method="POST">
+          <div class="form-group">
+            <label>Department</label>
+            <select name="department" required>
+              <option value="CSE">CSE</option>
+              <option value="IT">IT</option>
+            </select>
+          </div>
+          <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div>
+              <label>Year</label>
+              <select id="broadcast_year" name="year" required>
+                <option value="1st Year">1st Year</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+              </select>
+            </div>
+            <div>
+              <label>Semester</label>
+              <select id="broadcast_sem" name="semester" required>
+                <option value="Semester 1">Sem 1</option>
+                <option value="Semester 2">Sem 2</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn" style="background: #ea580c;">🚀 Send Notification to Staff</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3>Configure Faculty & Seniority</h3>
+        <p style="font-size: 13px; color: #5f6f86; margin-bottom: 20px;">Use this to create new accounts or update Seniority Levels for existing faculty members.</p>
+        
+        <form action="/admin/assign_faculty" method="POST">
+          <div class="form-group">
+            <label>Faculty Name</label>
+            <input type="text" name="faculty_name" list="existing_faculty" required placeholder="Type name (e.g. Dr. Jane Smith)">
+            <datalist id="existing_faculty">
+              {% for fac in faculty_list %}
+                <option value="{{ fac.name }}">
+              {% endfor %}
+            </datalist>
+          </div>
+          <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div>
+              <label>Faculty Email</label>
+              <input type="email" name="faculty_email" placeholder="email@university.edu">
+            </div>
+            <div>
+              <label>Seniority Level (1-5)</label>
+              <select name="seniority_level">
+                <option value="1">Level 1 (Highest)</option>
+                <option value="2">Level 2</option>
+                <option value="3">Level 3</option>
+                <option value="4">Level 4</option>
+                <option value="5">Level 5 (Lowest)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+            <div>
+              <label>Home Department</label>
+              <select name="department_faculty" required>
+                <option value="CSE">CSE</option>
+                <option value="IT">IT</option>
+              </select>
+            </div>
+            <div>
+              <label>Academic Year</label>
+              <select id="faculty_year" name="year_faculty" required>
+                <option value="1st Year">1st Year</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+              </select>
+            </div>
+            <div>
+              <label>Semester</label>
+              <select id="faculty_sem" name="semester_faculty" required>
+                <option value="Semester 1">Sem 1</option>
+                <option value="Semester 2">Sem 2</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn">Update Account & Level</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Right: Faculty List & Assignments -->
+    <div class="card">
+      <h3>👥 Faculty & Subjects</h3>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Faculty Info</th>
+              <th>Assigned Subjects</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for fac in faculty_list %}
+              <tr>
+                <td>
+                  <div class="faculty-id">{{ fac.name }} 
+                    <span style="font-size: 10px; background: #e0e7ff; color: #4338ca; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">L{{ fac.seniority_level }}</span>
+                  </div>
+                  <div class="faculty-user">@{{ fac.username }}</div>
+                  {% if fac.email %}
+                    <div style="font-size: 11px; color: #6b7c93; margin-top: 4px;">📧 {{ fac.email }}</div>
+                  {% endif %}
+                  <!-- Dept / Year / Semester badges -->
+                  <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;">
+                    {% if fac.department %}
+                      <span style="font-size: 10px; font-weight: 700; background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; padding: 2px 8px; border-radius: 20px;">
+                        🏛️ {{ fac.department }}
+                      </span>
+                    {% endif %}
+                    {% if fac.year %}
+                      <span style="font-size: 10px; font-weight: 700; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; padding: 2px 8px; border-radius: 20px;">
+                        📅 {{ fac.year }}
+                      </span>
+                    {% endif %}
+                    {% if fac.semester %}
+                      <span style="font-size: 10px; font-weight: 700; background: #fdf4ff; color: #7e22ce; border: 1px solid #e9d5ff; padding: 2px 8px; border-radius: 20px;">
+                        📖 {{ fac.semester }}
+                      </span>
+                    {% endif %}
+                    {% if not fac.department and not fac.year and not fac.semester %}
+                      <span style="font-size: 10px; color: #94a3b8; font-style: italic;">No cohort assigned</span>
+                    {% endif %}
+                  </div>
+                  <a href="/admin/delete_faculty/{{ fac.id }}" 
+                     style="color: #fca5a5; font-size: 11px; text-decoration: none; margin-top: 8px; display: inline-block; font-weight: 600;"
+                     onclick="return confirm('❗ WARNING: This will permanently delete the faculty account and all their assignments. Proceed?')">
+                     🗑️ Delete Account
+                  </a>
+                </td>
+
+                <td>
+                  {% if fac.assigned_subjects %}
+                    <div style="display: flex; flex-wrap: wrap;">
+                      {% for assign in fac.assigned_subjects %}
+                        <span class="assign-tag">
+                          <span>
+                            <span class="context">{{ assign.subject.department }} ({{ assign.subject.year }})</span><br>
+                            <strong>{{ assign.subject.subject_code }}</strong>: <span class="name">{{ assign.subject.subject_name }}</span>
+                          </span>
+                          <a href="/admin/delete_assignment/{{ assign.id }}" class="delete-assign" title="Remove Assignment">×</a>
+                        </span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    <span style="color: #475569; font-style: italic; font-size: 13px;">No subjects signed</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const semesterMap = {
+    '1st Year': [['Semester 1', 'Sem 1'], ['Semester 2', 'Sem 2']],
+    '2nd Year': [['Semester 3', 'Sem 3'], ['Semester 4', 'Sem 4']],
+    '3rd Year': [['Semester 5', 'Sem 5'], ['Semester 6', 'Sem 6']],
+    '4th Year': [['Semester 7', 'Sem 7'], ['Semester 8', 'Sem 8']]
+  };
+
+  // ── Helper: sync semester dropdown to match the selected year ──────────────
+  function syncSemesters(yearEl, semEl) {
+    const sems = semesterMap[yearEl.value] || [];
+    semEl.innerHTML = '';
+    sems.forEach(([val, label]) => {
+      const opt = document.createElement('option');
+      opt.value = val; opt.textContent = label;
+      semEl.appendChild(opt);
+    });
+  }
+
+  // ── Broadcast form ──────────────────────────────────────────────────────────
+  const broadcastYear = document.getElementById('broadcast_year');
+  const broadcastSem  = document.getElementById('broadcast_sem');
+  broadcastYear.addEventListener('change', () => syncSemesters(broadcastYear, broadcastSem));
+  syncSemesters(broadcastYear, broadcastSem); // init on load
+
+  // ── Configure Faculty form ──────────────────────────────────────────────────
+  const facultyYear = document.getElementById('faculty_year');
+  const facultySem  = document.getElementById('faculty_sem');
+  facultyYear.addEventListener('change', () => syncSemesters(facultyYear, facultySem));
+  syncSemesters(facultyYear, facultySem); // init on load
+
+  // ── Subject filter (existing logic) ────────────────────────────────────────
+  const yearFilter = document.getElementById('year_filter');
+  const semFilter = document.getElementById('sem_filter');
+  const deptFilter = document.getElementById('dept_filter');
+  const subList = document.getElementById('subject_checklist');
+
+  yearFilter.addEventListener('change', () => {
+    semFilter.innerHTML = '<option value="">Choose Semester...</option>';
+    if (semesterMap[yearFilter.value]) {
+      semesterMap[yearFilter.value].forEach(([val, label]) => {
+        const opt = document.createElement('option');
+        opt.value = val; opt.textContent = label;
+        semFilter.appendChild(opt);
+      });
+    }
+    loadSubjects();
+  });
+
+  semFilter.addEventListener('change', loadSubjects);
+  deptFilter.addEventListener('change', loadSubjects);
+
+  // New: refresh subjects when faculty name changes to exclude their current assignments
+  const facultyInput = document.querySelector('input[name="faculty_name"]');
+  facultyInput.addEventListener('input', loadSubjects);
+  facultyInput.addEventListener('change', loadSubjects);
+
+  function loadSubjects() {
+    const dept = deptFilter.value.trim();
+    const year = yearFilter.value.trim();
+    const sem = semFilter.value.trim();
+    const facultyName = facultyInput.value.trim();
+
+    console.log(`[DEBUG] Loading subjects for: ${dept}, ${year}, ${sem}, exclude: ${facultyName}`);
+
+    if (!dept || !year || !sem) {
+      subList.innerHTML = '<div style="color: #6b7c93; font-style: italic; font-size: 13px; text-align: center; padding: 10px;">Select Year & Semester first</div>';
+      return;
+    }
+
+    subList.innerHTML = '<div style="color: #818cf8; font-size: 13px; text-align: center; padding: 10px;">Loading subjects...</div>';
+
+    const params = new URLSearchParams();
+    params.append('course_level', 'UG');
+    params.append('department', dept);
+    params.append('year', year);
+    params.append('semester', sem);
+    params.append('hide_assigned', 'true');
+
+    fetch("/admin/get_subjects", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params.toString()
+    })
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    })
+    .then(subjects => {
+      console.log(`[DEBUG] Received ${subjects.length} subjects`);
+      subList.innerHTML = '';
+      if (subjects.length === 0) {
+        subList.innerHTML = '<div style="color: #fca5a5; font-size: 13px; text-align: center; padding: 10px;">No subjects found</div>';
+      } else {
+        subjects.forEach(sub => {
+          const div = document.createElement('label');
+          div.className = 'subject-item';
+          div.innerHTML = `
+            <input type="checkbox" name="subject_id" value="${sub.id}">
+            <span><strong>${sub.code}</strong> - ${sub.name}</span>
+          `;
+          subList.appendChild(div);
+        });
+      }
+    })
+    .catch(err => {
+      console.error("[DEBUG] Load error:", err);
+      subList.innerHTML = `<div style="color: #fca5a5; font-size: 13px; text-align: center; padding: 10px;">Error: ${err.message}</div>`;
+    });
+  }
+</script>
+
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faculty Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color: #1e293b; min-height: 100vh; position: relative; }
+    
+    .navbar {
+        height: 72px; background: #ffffff; 
+        display: flex; align-items: center; justify-content: space-between; padding: 0 40px;
+        border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100;
+    }
+    .navbar-brand { font-size: 20px; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px; }
+    .navbar-brand span { color: #10b981; }
+    .nav-badge { background: #f0fdf4; color: #10b981; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; border: 1px solid #dcfce7; }
+    .navbar-links { display: flex; gap: 24px; align-items: center; }
+    .navbar-links a { color: #475569; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.2s; }
+    .navbar-links a:hover { color: #10b981; }
+    .logout-btn { color: #ef4444 !important; }
+
+    .container { max-width: 1240px; margin: 0 auto; padding: 40px 20px; }
+    
+    .header-info h1 { font-size: 36px; font-weight: 800; letter-spacing: -2px; color: #0f172a; margin-bottom: 12px; }
+    .header-info p { font-size: 16px; color: #64748b; line-height: 1.6; max-width: 500px; }
+
+    .section-title { font-size: 20px; font-weight: 800; margin-bottom: 32px; color: #0f172a; display: flex; align-items: center; gap: 12px; }
+    .section-title span { background: #f0fdf4; padding: 6px; border-radius: 8px; font-size: 18px; }
+    
+    .subjects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 24px; }
+    .subject-card { 
+        background: #ffffff; border: 1px solid #e2e8f0; 
+        border-radius: 16px; padding: 24px; position: relative; transition: 0.2s;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .subject-card:hover { border-color: #10b981; transform: translateY(-2px); }
+    .subject-code { font-size: 11px; font-weight: 800; color: #10b981; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .subject-name { font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 20px; }
+    
+    .status-items { display: flex; flex-wrap: wrap; gap: 8px; }
+    .status-pill { 
+        padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; 
+        background: #f8fafc; border: 1px solid #e2e8f0; color: #64748b;
+    }
+    .status-pill.active { background: #f0fdf4; border-color: #dcfce7; color: #10b981; }
+
+    .action-bar { margin-top: 24px; padding-top: 20px; border-top: 1px solid #f1f5f9; }
+    .btn-upload { 
+        display: inline-flex; align-items: center; gap: 8px; 
+        background: #f0fdf4; color: #10b981; 
+        padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; 
+        text-decoration: none; transition: 0.2s; border: 1px solid #dcfce7;
+    }
+    .btn-upload:hover { background: #10b981; color: #ffffff; }
+
+    .empty-state { text-align: center; padding: 60px 20px; background: #ffffff; border-radius: 16px; border: 2px dashed #e2e8f0; }
+    .empty-state h3 { font-size: 20px; color: #0f172a; margin-bottom: 12px; }
+    .empty-state p { color: #64748b; font-size: 14px; }
+
+    .alert-success { background: #f0fdf4; border: 1px solid #dcfce7; color: #166534; }
+    
+    @media (max-width: 992px) {
+        .header-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+        .faculty-profile-card { width: 100% !important; }
+    }
+    
+    @media (max-width: 640px) {
+        .navbar { padding: 0 20px; }
+        .navbar-links { gap: 12px; }
+        .navbar-links a { font-size: 12px; }
+        .subjects-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='light-theme.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-brand">📚 Study<span>Material</span> <span class="nav-badge">FACULTY</span></div>
+  <div style="font-size: 13px; color: #64748b; font-weight: 600; background: #f8fafc; padding: 6px 14px; border-radius: 10px; border: 1px solid #e2e8f0; margin-left: 20px;">
+    👤 {{ faculty.name }}
+  </div>
+  <div class="navbar-links">
+        <a href="/faculty" class="nav-item">🏠 Dashboard</a>
+        <a href="/faculty/selection" class="nav-item" style="background: #ecfdf5; color: #10b981; border: 1px solid #d1fae5;">🎯 Select Subjects</a>
+    <a href="/faculty/verify" class="{% if pending_count > 0 %}active{% endif %}">
+        ✅ Verification 
+        {% if pending_count > 0 %}
+            <span style="background: #ef4444; color: #ffffff; padding: 2px 6px; border-radius: 6px; font-size: 10px; margin-left: 4px;">{{ pending_count }}</span>
+        {% endif %}
+    </a>
+
+    <a href="/faculty/logout" class="logout-btn">🚪 Logout</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="header-info" style="margin-bottom: 60px; text-align: center; background: #ffffff; padding: 60px; border-radius: 32px; border: 1px solid #f1f5f9;">
+    <h1 style="font-size: 40px; font-weight: 800; letter-spacing: -2px; color: #0f172a; margin-bottom: 12px;">📚 Faculty Dashboard</h1>
+    <p style="font-size: 18px; color: #64748b; line-height: 1.6; max-width: 600px; margin: 0 auto;">Manage your assigned subjects and verify generated study materials.</p>
+  </div>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}<div class="alert alert-success">✨ {{ messages[0] }}</div>{% endif %}
+  {% endwith %}
+
+  <div class="section-title"><span>📚</span> Your Assigned Subjects</div>
+
+  {% if assigned_subjects %}
+    <div class="subjects-grid">
+      {% for sub in assigned_subjects %}
+        <div class="subject-card">
+          <div class="subject-code">{{ sub.code }} | {{ sub.dept }}</div>
+          <div class="subject-name">{{ sub.name }}</div>
+          
+          <div class="status-items">
+            <div class="status-pill {% if sub.materials.notes.count > 0 %}active{% endif %}">
+              {% if sub.materials.notes.count == 1 %}
+                <a href="{{ sub.materials.notes.urls[0].url }}" target="_blank" style="text-decoration:none; color:inherit;">✅ Notes (1)</a>
+              {% elif sub.materials.notes.count > 1 %}
+                ✅ Notes: {% for f in sub.materials.notes.urls %}<a href="{{ f.url }}" target="_blank" style="text-decoration:underline; color:inherit; margin-left: 2px;">[{{ f.index }}]</a>{% endfor %}
+              {% else %}❌ Notes{% endif %}
+            </div>
+            <div class="status-pill {% if sub.materials.pyq.count > 0 %}active{% endif %}">
+              {% if sub.materials.pyq.count == 1 %}
+                <a href="{{ sub.materials.pyq.urls[0].url }}" target="_blank" style="text-decoration:none; color:inherit;">✅ PYQs (1)</a>
+              {% elif sub.materials.pyq.count > 1 %}
+                ✅ PYQs: {% for f in sub.materials.pyq.urls %}<a href="{{ f.url }}" target="_blank" style="text-decoration:underline; color:inherit; margin-left: 2px;">[{{ f.index }}]</a>{% endfor %}
+              {% else %}❌ PYQs{% endif %}
+            </div>
+            <div class="status-pill {% if sub.materials.syllabus.count > 0 %}active{% endif %}">
+              {% if sub.materials.syllabus.count == 1 %}
+                <a href="{{ sub.materials.syllabus.urls[0].url }}" target="_blank" style="text-decoration:none; color:inherit;">✅ Syllabus (1)</a>
+              {% elif sub.materials.syllabus.count > 1 %}
+                ✅ Syllabus: {% for f in sub.materials.syllabus.urls %}<a href="{{ f.url }}" target="_blank" style="text-decoration:underline; color:inherit; margin-left: 2px;">[{{ f.index }}]</a>{% endfor %}
+              {% else %}❌ Syllabus{% endif %}
+            </div>
+            <div class="status-pill {% if sub.materials.question_bank.count > 0 %}active{% endif %}">
+              {% if sub.materials.question_bank.count == 1 %}
+                <a href="{{ sub.materials.question_bank.urls[0].url }}" target="_blank" style="text-decoration:none; color:inherit;">✅ Q-Bank (1)</a>
+              {% elif sub.materials.question_bank.count > 1 %}
+                ✅ Q-Bank: {% for f in sub.materials.question_bank.urls %}<a href="{{ f.url }}" target="_blank" style="text-decoration:underline; color:inherit; margin-left: 2px;">[{{ f.index }}]</a>{% endfor %}
+              {% else %}❌ Q-Bank{% endif %}
+            </div>
+          </div>
+
+          <div class="action-bar">
+            <a href="/admin/upload?level={{ sub.level }}&dept={{ sub.dept }}&year={{ sub.year }}&sem={{ sub.sem }}&code={{ sub.code }}" class="btn-upload"><span>📤</span> Upload Materials</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <h3>No Subjects Assigned</h3>
+      <p>Please contact the system administrator to "sign" you for registered subjects.</p>
+    </div>
+  {% endif %}
+</div>
+
+</body>
+</html>
+
+
+
+
+

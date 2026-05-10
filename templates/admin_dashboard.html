@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #f8fafc;
+      min-height: 100vh;
+      color: #1e293b;
+      position: relative;
+    }
+
+    .navbar {
+      background: #ffffff;
+      padding: 0 40px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar-brand {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar-brand span {
+      color: #2563eb;
+    }
+
+    .nav-badge {
+      background: #ef4444;
+      color: #ffffff;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      margin-left: 12px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .navbar-links {
+      display: flex;
+      gap: 8px;
+    }
+
+    .navbar-links a {
+      color: #475569;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .navbar-links a:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .navbar-links a.active {
+      background: #eff6ff;
+      color: #2563eb;
+      border: 1px solid #dbeafe;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 32px;
+      letter-spacing: -1px;
+      color: #0f172a;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 32px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      transition: all 0.2s;
+    }
+
+    .stat-card:hover {
+      border-color: #3b82f6;
+    }
+
+    .stat-num {
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -1px;
+      color: #0f172a;
+    }
+
+    .stat-lbl {
+      font-size: 13px;
+      color: #64748b;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .blue { color: #2563eb; }
+    .emerald { color: #059669; }
+    .violet { color: #7c3aed; }
+    .rose { color: #e11d48; }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .card {
+      background: #ffffff;
+      
+      border-radius: 24px;
+      padding: 32px;
+      border: 1px solid #e5ebf4;
+      height: 100%;
+    }
+
+    .card h3 {
+      font-size: 19px;
+      font-weight: 800;
+      margin-bottom: 24px;
+      color: #182230;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 14.5px;
+    }
+
+    th {
+      color: #6b7c93;
+      padding: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 1px;
+      border-bottom: 1px solid #e5ebf4;
+      text-align: left;
+    }
+
+    td {
+      padding: 18px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      color: #4b5a70;
+      font-weight: 500;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .tag {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tag-blue { background: #eff6ff; color: #2563eb; border: 1px solid #dbeafe; }
+    .tag-emerald { background: #f0fdf4; color: #166534; border: 1px solid #dcfce7; }
+    .tag-red { background: #fef2f2; color: #991b1b; border: 1px solid #fee2e2; }
+    .tag-purple { background: #f5f3ff; color: #5b21b6; border: 1px solid #ede9fe; }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 16px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      color: #1e293b;
+      font-size: 15px;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
+
+    .full { width: 100%; }
+
+    .alert-success {
+      background: #f0fdf4;
+      color: #166534;
+      padding: 16px 24px;
+      border-radius: 12px;
+      font-size: 14px;
+      margin-bottom: 32px;
+      font-weight: 600;
+      border: 1px solid #dcfce7;
+    }
+
+    .subject-name {
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .subject-meta {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    @media (max-width: 768px) {
+      .section-grid { grid-template-columns: 1fr; }
+      .navbar { padding: 0 20px; }
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='light-theme.css') }}">
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-brand">📚 Study<span>Material</span> <span class="nav-badge">ADMIN</span></div>
+    <div class="navbar-links">
+      <a href="/admin" class="active"><span>🏠</span> Dashboard</a>
+      <a href="/admin/students"><span>👥</span> Students</a>
+      <a href="/admin/history"><span>📋</span> History</a>
+      <a href="/admin/faculty"><span>🎓</span> Faculty</a>
+      <a href="/admin/logout"><span>🚪</span> Logout</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <p class="page-title">Admin Dashboard</p>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}<div class="alert-success">✨ {{ messages[0] }}</div>{% endif %}
+    {% endwith %}
+
+    <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+      <div class="stat-card">
+        <div class="stat-num blue">{{ total_students }}</div>
+        <div class="stat-lbl">Active Students</div>
+        <div style="font-size: 11px; margin-top: 4px; color: #818cf8;">{{ student_logins_today }} active today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num emerald">{{ total_faculty }}</div>
+        <div class="stat-lbl">Registered Faculty</div>
+        <div style="font-size: 11px; margin-top: 4px; color: #10b981;">{{ faculty_logins_today }} active today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num violet">{{ today_generations }}</div>
+        <div class="stat-lbl">Generated Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num rose">{{ total_generations }}</div>
+        <div class="stat-lbl">Total History</div>
+      </div>
+    </div>
+
+
+
+    <div class="card" style="margin-bottom: 24px;">
+      <h3>Top Subjects</h3>
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Course / Subject</th>
+              <th style="padding-right: 0;">Popularity</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for subject, count in top_subjects %}
+            <tr>
+              <td style="color:#6366f1; font-weight:800; font-size:16px;">#{{ loop.index }}</td>
+              <td>
+                <div class="subject-name">{{ subject }}</div>
+                <div class="subject-meta">Study Materials Generation Tracked</div>
+              </td>
+              <td style="padding-right: 0;"><span class="tag tag-blue">{{ count }} uses</span></td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="3" style="text-align:center; padding:60px; color:#4b5563;">Platform usage data is pending...
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:32px;">
+      <h3>Recent Activity</h3>
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Roll No</th>
+              <th>Dept</th>
+              <th>Year</th>
+              <th>Target Subject</th>
+              <th>Topic</th>
+              <th>Timestamp</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in recent_history %}
+            <tr>
+              <td style="font-weight:700; color: #182230;">{{ r.student.name if r.student else "System User" }}</td>
+              <td><span class="tag tag-blue">{{ r.student.roll_no if r.student else "-" }}</span></td>
+              <td style="font-size: 13px; font-weight: 700; color: #475569;">{{ r.department or "-" }}</td>
+              <td style="font-size: 12px; color: #64748b;">{{ r.year or "-" }}</td>
+              <td>{{ r.subject }}</td>
+              <td style="font-weight:600; color: #a78bfa;">{{ r.topic }}</td>
+              <td style="color:#6b7c93; font-size:13px;">{{ r.created_at.strftime("%d %b, %H:%M") }}</td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="7" style="text-align:center; padding:60px; color:#4b5563;">Activity log is currently empty.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:32px;">
+      <h3>Add New Subject</h3>
+      <p style="font-size: 14.5px; color: #5f6f86; margin-bottom: 32px; max-width: 700px;">
+        Add new core subjects or professional electives. Once submitted, these become instantly available for student
+        material generation.
+      </p>
+      <form method="POST" action="/admin/add_subject">
+        <div class="section-grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 0;">
+          <div class="form-group">
+            <label>Course Level</label>
+            <select name="course_level" required>
+              <option value="UG">UG</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Academic Department</label>
+            <select name="department" required>
+              <option value="">Select Dept</option>
+              <option value="CSE">CSE</option>
+              <option value="IT">IT</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Academic Year</label>
+            <select name="year" id="year" required onchange="updateSemesters()">
+              <option value="">Select Year</option>
+              <option value="1st Year">1st Year</option>
+              <option value="2nd Year">2nd Year</option>
+              <option value="3rd Year">3rd Year</option>
+              <option value="4th Year">4th Year</option>
+            </select>
+          </div>
+        </div>
+        <div class="section-grid" style="grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 0;">
+          <div class="form-group">
+            <label>Semester</label>
+            <select name="semester" id="semester" required>
+              <option value="">Select Semester Sequence</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Subject Code</label>
+            <input type="text" name="subject_code" placeholder="e.g. CS3351" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Official Subject Title</label>
+          <input type="text" name="subject_name" placeholder="e.g. Distributed Infrastructure Management" required>
+        </div>
+        <button class="btn btn-primary" type="submit">Add New Subject</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h3>Manage Subjects</h3>
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Level</th>
+              <th>Dept</th>
+              <th>Year & Sem</th>
+              <th>Subject</th>
+              <th>Notes</th>
+              <th>PYQ</th>
+              <th>Syllabus</th>
+              <th>Bank</th>
+              <th style="text-align: right;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for sub in all_subjects %}
+            <tr>
+              <td style="font-weight:700; color:#c084fc;">{{ sub.course_level }}</td>
+              <td style="font-weight:800; color:#818cf8;">{{ sub.department }}</td>
+              <td style="font-size:13px; color:#5f6f86; line-height:1.4;">{{ sub.year }}<br />{{ sub.semester }}</td>
+              <td>
+                <div class="subject-name" style="font-size:14px;">{{ sub.code }}</div>
+                <div class="subject-meta" style="font-size:12px;">{{ sub.name }}</div>
+              </td>
+              <td>
+                {% if sub.materials.notes.count > 0 %}<span class="tag tag-emerald">✅ {{ sub.materials.notes.count }}</span>
+                {% else %}<span class="tag tag-red">❌ 0</span>{% endif %}
+              </td>
+              <td>
+                {% if sub.materials.pyq.count > 0 %}<span class="tag tag-emerald">✅ {{ sub.materials.pyq.count }}</span>
+                {% else %}<span class="tag tag-red">❌ 0</span>{% endif %}
+              </td>
+              <td>
+                {% if sub.materials.syllabus.count > 0 %}<span class="tag tag-emerald">✅ {{ sub.materials.syllabus.count }}</span>
+                {% else %}<span class="tag tag-red">❌ 0</span>{% endif %}
+              </td>
+              <td>
+                {% if sub.materials.question_bank.count > 0 %}<span class="tag tag-emerald">✅ {{ sub.materials.question_bank.count }}</span>
+                {% else %}<span class="tag tag-red">❌ 0</span>{% endif %}
+              </td>
+              <td style="text-align: right;">
+                <a href="/admin/delete_subject/{{ sub.id }}" class="tag tag-red"
+                  style="text-decoration: none; padding: 6px 14px;"
+                  onclick="return confirm('Permanently remove this subject configuration?');">🗑 Delete</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <script>
+    const adminSemesterMap = {
+      '1st Year': [['Semester 1', 'Semester 1'], ['Semester 2', 'Semester 2']],
+      '2nd Year': [['Semester 3', 'Semester 3'], ['Semester 4', 'Semester 4']],
+      '3rd Year': [['Semester 5', 'Semester 5'], ['Semester 6', 'Semester 6']],
+      '4th Year': [['Semester 7', 'Semester 7'], ['Semester 8', 'Semester 8']]
+    };
+
+    function updateSemesters() {
+      const year = document.getElementById('year').value;
+      const semSelect = document.getElementById('semester');
+      semSelect.innerHTML = '<option value="">Select Semester Sequence</option>';
+      if (adminSemesterMap[year]) {
+        adminSemesterMap[year].forEach(([val, label]) => {
+          const opt = document.createElement('option');
+          opt.value = val;
+          opt.textContent = label;
+          semSelect.appendChild(opt);
+        });
+      }
+    }
+  </script>
+
+</body>
+
+</html>
+
+
+
+

@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #f8fafc;
+      min-height: 100vh;
+      color: #1e293b;
+      position: relative;
+    }
+
+    .navbar {
+      background: #ffffff;
+      padding: 0 40px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar-brand {
+      font-size: 22px;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+    }
+
+    .navbar-brand span {
+      color: #2563eb;
+    }
+
+    .navbar-links {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .navbar-links a {
+      color: #475569;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .navbar-links a:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    .welcome-card {
+      background: #2563eb;
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      color: #ffffff;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.1);
+    }
+
+    .avatar {
+      width: 56px;
+      height: 56px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .welcome-card h2 {
+      font-size: 24px;
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .welcome-card p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 32px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .card h3 {
+      font-size: 18px;
+      color: #0f172a;
+      font-weight: 700;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    select,
+    input[type=text] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #1e293b;
+      background: #ffffff;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    select:focus,
+    input[type=text]:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+    }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: #2563eb;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.2s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      background: #1d4ed8;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .info-box {
+      background: #eff6ff;
+      border: 1px solid #dbeafe;
+      padding: 16px;
+      border-radius: 12px;
+      color: #1e40af;
+      font-size: 13.5px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .library-section {
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .library-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .lib-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      padding: 16px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: 0.2s;
+      text-decoration: none;
+    }
+
+    .lib-card:hover {
+      border-color: #3b82f6;
+      background: #f8fafc;
+    }
+
+    .lib-name {
+      font-weight: 700;
+      color: #0f172a;
+      font-size: 14px;
+    }
+
+    .lib-type {
+      font-size: 11px;
+      color: #64748b;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .error {
+      background: #fef2f2;
+      color: #b91c1c;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 24px;
+      border: 1px solid #fee2e2;
+    }
+
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      z-index: 1000;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loading-overlay.active {
+      display: flex;
+    }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #e2e8f0;
+      border-top-color: #2563eb;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .pdf-card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid #e2e8f0;
+      display: none;
+      margin-bottom: 16px;
+    }
+
+    .pdf-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 12px;
+    }
+
+    .pdf-card-header h3 {
+      font-size: 15px;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    .pdf-tag {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .pdf-tag-blue { background: #eff6ff; color: #2563eb; border: 1px solid #dbeafe; }
+    .pdf-tag-green { background: #f0fdf4; color: #166534; border: 1px solid #dcfce7; }
+    .pdf-tag-purple { background: #f5f3ff; color: #5b21b6; border: 1px solid #ede9fe; }
+
+    .pdf-open-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #475569;
+    }
+
+    .pdf-open-btn:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .lang-picker {
+      display: none;
+      background: #fdfaf1;
+      border: 1px solid #fef3c7;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .lang-picker.visible {
+      display: block;
+    }
+
+    .lang-picker-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #92400e;
+      margin-bottom: 12px;
+    }
+
+    .lang-options {
+      display: flex;
+      gap: 10px;
+    }
+
+    .lang-option label {
+      display: block;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid #e2e8f0;
+      background: #ffffff;
+      color: #475569;
+    }
+
+    .lang-option input[type=radio] {
+      display: none;
+    }
+
+    .lang-option input[type=radio]:checked+label {
+      background: #fef3c7;
+      border-color: #f59e0b;
+      color: #92400e;
+    }
+
+    @media (max-width: 768px) {
+      .grid2, .navbar {
+        flex-direction: column;
+        padding: 10px 20px;
+        height: auto;
+      }
+      .navbar-links { margin-top: 10px; }
+      .grid2 { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='light-theme.css') }}">
+</head>
+
+<body>
+
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Crafting Your Study Material ✨</div>
+    <div class="loading-sub">AI is organizing your context. Usually takes 15–20 seconds.</div>
+  </div>
+
+  <nav class="navbar">
+    <div class="navbar-brand">📚 Study<span>Material</span></div>
+    <div class="navbar-links">
+      <a href="/history"><span>📋</span> History</a>
+      <a href="/logout"><span>🚪</span> Logout</a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <div class="card">
+      <h3>⚡ Generate Material</h3>
+
+      {% if error %}
+      <div class="error">⚠️ {{ error }}</div>
+      {% endif %}
+
+      <form action="/generate" method="POST" id="generateForm">
+        <div class="grid2">
+          <div class="form-group">
+            <label>Course Level</label>
+            <select name="course_level" id="course_level" required onchange="loadSubjects()">
+              <option value="UG">UG</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Regulation</label>
+            <select name="regulation" id="regulation" required onchange="loadSubjects()">
+              <option value="">Select</option>
+              <option value="R2021">R2021</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="form-group">
+            <label>Department</label>
+            <select name="department" id="department" required onchange="loadSubjects()">
+              <option value="">Select</option>
+              <option value="CSE">CSE</option>
+              <option value="IT">IT</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Year</label>
+            <select name="year" id="year" required onchange="updateSemesters(); loadSubjects();">
+              <option value="">Select</option>
+              <option value="1st Year">1st Year</option>
+              <option value="2nd Year">2nd Year</option>
+              <option value="3rd Year">3rd Year</option>
+              <option value="4th Year">4th Year</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid2">
+
+          <div class="form-group">
+            <label>Semester</label>
+            <select name="semester" id="semester" required onchange="loadSubjects()">
+              <option value="">Select Year first</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Subject</label>
+            <select name="subject_code" id="subject_select" required onchange="setSubjectName()">
+              <option value="">Select Dept, Year & Sem first</option>
+            </select>
+            <input type="hidden" name="subject_name" id="subject_name">
+          </div>
+        </div>
+
+        <!-- Info Box for Subject Selection -->
+        <div class="info-box" id="info_box" style="display: none;">
+          <span>💡</span>
+          <div>
+            <strong>Subject Selected!</strong> AI will now prioritize standard curriculum notes and verified institute materials for your response.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Topic</label>
+          <input type="text" name="topic" placeholder="e.g. Sorting, Binary Trees, Linked List, Stack" required>
+        </div>
+
+
+
+        <!-- Tamil Language Preference – shown only for Tamil subjects -->
+        <div class="lang-picker" id="lang_picker">
+          <div class="lang-picker-title">🌐 மொழி தேர்வு / Choose Language</div>
+          <div class="lang-options">
+            <div class="lang-option">
+              <input type="radio" name="language_preference" id="lang_tamil" value="tamil">
+              <label for="lang_tamil">🅣 தமிழில் / In Tamil</label>
+            </div>
+            <div class="lang-option">
+              <input type="radio" name="language_preference" id="lang_english" value="english" checked>
+              <label for="lang_english">🔤 English / ஆங்கிலத்தில்</label>
+            </div>
+          </div>
+        </div>
+        <!-- Hidden fallback for non-Tamil subjects -->
+        <input type="hidden" name="language_preference" id="lang_hidden" value="english">
+
+        
+        <button class="btn" type="submit" id="generateBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          Generate Material
+        </button>
+      </form>
+
+      <!-- Library Preview Section -->
+      <div class="library-section" id="library_section" style="display: none;">
+        <h3 style="font-size: 18px; font-weight: 700;">📚 Browse Repository</h3>
+        <p style="font-size: 13px; color: #6b7c93; margin-top: 4px;">Existing materials found for this subject.</p>
+        <div class="library-grid" id="library_grid"></div>
+      </div>
+    </div>
+
+    <div class="grid2 pdf-preview-grid">
+      <div class="pdf-card" id="notes_card">
+        <div class="pdf-card-header">
+          <h3>📝 Study Notes</h3>
+          <span class="pdf-tag pdf-tag-blue">Institute Upload</span>
+        </div>
+        <div id="notes_content"></div>
+      </div>
+      <div class="pdf-card" id="syllabus_card">
+        <div class="pdf-card-header">
+          <h3>📘 Syllabus</h3>
+          <span class="pdf-tag pdf-tag-green">University Reference</span>
+        </div>
+        <div id="syllabus_content"></div>
+      </div>
+      <div class="pdf-card" id="qb_card">
+        <div class="pdf-card-header">
+          <h3>📋 Question Bank</h3>
+          <span class="pdf-tag pdf-tag-purple">Resource Pack</span>
+        </div>
+        <div id="qb_content"></div>
+      </div>
+      <div class="pdf-card" id="pyq_card">
+        <div class="pdf-card-header">
+          <h3>📜 Previous Year Qns</h3>
+          <span class="pdf-tag pdf-tag-purple">Exam Ref</span>
+        </div>
+        <div id="pyq_content"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const semesterMap = {
+      '1st Year': [['Semester 1', 'Sem 1'], ['Semester 2', 'Sem 2']],
+      '2nd Year': [['Semester 3', 'Sem 3'], ['Semester 4', 'Sem 4']],
+      '3rd Year': [['Semester 5', 'Sem 5'], ['Semester 6', 'Sem 6']],
+      '4th Year': [['Semester 7', 'Sem 7'], ['Semester 8', 'Sem 8']]
+    };
+
+    function updateSemesters() {
+      const year = document.getElementById('year').value;
+      const semSelect = document.getElementById('semester');
+      semSelect.innerHTML = '<option value="">Select Semester</option>';
+      if (semesterMap[year]) {
+        semesterMap[year].forEach(([val, label]) => {
+          const opt = document.createElement('option');
+          opt.value = val; opt.textContent = label;
+          semSelect.appendChild(opt);
+        });
+      }
+    }
+
+
+    document.getElementById("generateForm").addEventListener("submit", function () {
+      document.getElementById("loadingOverlay").classList.add("active");
+      const btn = document.getElementById("generateBtn");
+      btn.disabled = true;
+      btn.innerHTML = 'Crafting...';
+    });
+
+    function loadSubjects() {
+      const level = document.getElementById("course_level").value;
+      const dept = document.getElementById("department").value;
+      const year = document.getElementById("year").value;
+      const sem = document.getElementById("semester").value;
+      const select = document.getElementById("subject_select");
+      document.getElementById("notes_card").style.display = "none";
+      document.getElementById("syllabus_card").style.display = "none";
+      document.getElementById("qb_card").style.display = "none";
+      document.getElementById("pyq_card").style.display = "none";
+      document.getElementById("info_box").style.display = "none";
+      document.getElementById("library_section").style.display = "none";
+      if (!level || !dept || !year || !sem) { select.innerHTML = '<option value="">Select Dept, Year & Sem first</option>'; return; }
+      select.innerHTML = '<option value="">Loading...</option>';
+      fetch("/get_subjects", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: `course_level=${encodeURIComponent(level)}&department=${encodeURIComponent(dept)}&year=${encodeURIComponent(year)}&semester=${encodeURIComponent(sem)}` })
+        .then(r => r.json()).then(subjects => {
+          select.innerHTML = '<option value="">Select Subject</option>';
+          if (!subjects.length) { select.innerHTML = '<option value="">No subjects found</option>'; return; }
+          subjects.forEach(s => { const o = document.createElement("option"); o.value = s.code; o.textContent = `${s.code} - ${s.name}`; o.dataset.name = s.name; select.appendChild(o); });
+        }).catch(() => { select.innerHTML = '<option value="">Error loading subjects</option>'; });
+    }
+
+    function setSubjectName() {
+      const select = document.getElementById("subject_select");
+      const selected = select.options[select.selectedIndex];
+      document.getElementById("subject_name").value = selected.dataset.name || "";
+
+      const subName = selected.dataset.name || "";
+      const langPicker = document.getElementById("lang_picker");
+      if (subName.toLowerCase().includes("tamil") || subName.includes("தமிழ்")) {
+        langPicker.style.display = "block";
+      } else {
+        langPicker.style.display = "none";
+        document.getElementById("lang_hidden").value = "english";
+      }
+
+      function loadLibrary() {
+        const libSection = document.getElementById("library_section");
+        if (libSection) libSection.style.display = "block";
+      }
+
+      if (select.value) {
+        loadLibrary();
+      } else {
+        const libSection = document.getElementById("library_section");
+        if (libSection) libSection.style.display = "none";
+      }
+
+      const code = select.value;
+      const dept = document.getElementById("department").value;
+      const year = document.getElementById("year").value;
+      const sem = document.getElementById("semester").value;
+      const reg = document.getElementById("regulation").value;
+      const level = document.getElementById("course_level").value;
+
+      const infoBox = document.getElementById("info_box");
+      infoBox.style.display = code ? "flex" : "none";
+
+      if (!code) {
+        document.getElementById("notes_card").style.display = "none";
+        document.getElementById("syllabus_card").style.display = "none";
+        document.getElementById("qb_card").style.display = "none";
+        document.getElementById("pyq_card").style.display = "none";
+        return;
+      }
+
+      const bodyBase = `course_level=${encodeURIComponent(level)}&department=${encodeURIComponent(dept)}&regulation=${encodeURIComponent(reg)}&year=${encodeURIComponent(year)}&semester=${encodeURIComponent(sem)}&subject_code=${encodeURIComponent(code)}`;
+
+      function renderFiles(files, viewRoute, downloadRoute, tagClass, label, contentEl, cardEl) {
+        cardEl.style.display = "block";
+        if (!files.length) {
+          const msg = viewRoute.includes("notes") ? "No notes uploaded for this subject yet."
+            : viewRoute.includes("pyq") ? "No PYQ uploaded for this subject."
+              : viewRoute.includes("syllabus") ? "No syllabus uploaded for this subject." : "No Question Bank uploaded.";
+          contentEl.innerHTML = `<p class="no-pdf"><span class="no-pdf-icon">📭</span>${msg}</p>`;
+          return;
+        }
+        contentEl.innerHTML = files.map((f, i) => {
+          const vUrl = `/${viewRoute}/${encodeURIComponent(dept)}/${encodeURIComponent(level)}/${encodeURIComponent(reg)}/${encodeURIComponent(year)}/${encodeURIComponent(sem)}/${encodeURIComponent(code)}/${f.index}`;
+          const dUrl = `/${downloadRoute}/${encodeURIComponent(dept)}/${encodeURIComponent(level)}/${encodeURIComponent(reg)}/${encodeURIComponent(year)}/${encodeURIComponent(sem)}/${encodeURIComponent(code)}/${f.index}`;
+          const num = files.length > 1 ? ` #${f.index}` : "";
+          return `
+        <div style="margin-bottom:${i < files.length - 1 ? '16px' : '0'}; border-bottom:${i < files.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none'}; padding-bottom:${i < files.length - 1 ? '16px' : '0'}">
+          ${files.length > 1 ? `<div style="font-size:13px;color:#5f6f86;margin-bottom:8px;font-weight:600;">${label}${num}</div>` : ''}
+          <div style="display:flex;gap:10px;">
+            <a href="${vUrl}" target="_blank" class="pdf-open-btn ${tagClass}">🔗 View</a>
+            <a href="${dUrl}" class="pdf-open-btn ${tagClass}">📥 Download</a>
+          </div>
+        </div>`;
+        }).join("");
+      }
+
+      fetch("/get_material_files", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: bodyBase + "&file_type=notes" })
+        .then(r => r.json()).then(data => { renderFiles(data.files, "view_notes", "download_notes", "pdf-open-btn-blue", "Notes", document.getElementById("notes_content"), document.getElementById("notes_card")); }).catch(() => { document.getElementById("notes_card").style.display = "none"; });
+
+      fetch("/get_material_files", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: bodyBase + "&file_type=syllabus" })
+        .then(r => r.json()).then(data => { renderFiles(data.files, "view_syllabus", "download_syllabus", "pdf-open-btn-green", "Syllabus", document.getElementById("syllabus_content"), document.getElementById("syllabus_card")); }).catch(() => { document.getElementById("syllabus_card").style.display = "none"; });
+
+      fetch("/get_material_files", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: bodyBase + "&file_type=question_bank" })
+        .then(r => r.json()).then(data => { renderFiles(data.files, "view_question_bank", "download_question_bank", "pdf-open-btn-purple", "QB", document.getElementById("qb_content"), document.getElementById("qb_card")); }).catch(() => { document.getElementById("qb_card").style.display = "none"; });
+
+      fetch("/get_material_files", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: bodyBase + "&file_type=pyq" })
+        .then(r => r.json()).then(data => { renderFiles(data.files, "view_pyq", "download_pyq", "pdf-open-btn-purple", "PYQ", document.getElementById("pyq_content"), document.getElementById("pyq_card")); }).catch(() => { document.getElementById("pyq_card").style.display = "none"; });
+    }
+
+    // Global Search Logic
+    const globalSearch = document.getElementById("globalSearch");
+    if (globalSearch) {
+        globalSearch.addEventListener("input", function(e) {
+          const term = e.target.value.toLowerCase();
+          const recContainer = document.getElementById("recommendations-container");
+          if (!recContainer) return;
+
+          const cards = recContainer.querySelectorAll(".card");
+          cards.forEach(card => {
+            const text = card.textContent.toLowerCase();
+            if (text.includes(term)) {
+              card.style.display = "block";
+            } else {
+              card.style.display = "none";
+            }
+          });
+        });
+    }
+    // Final Robust Auto-select
+    (function() {
+      const userDept = "{{ current_user.department }}".trim();
+      const userYear = "{{ current_user.year }}".trim();
+      const userSem  = "{{ current_user.semester }}".trim();
+      
+      console.log("🛠️ Syncing Profile:", { userDept, userYear, userSem });
+
+      function selectByValue(el, val) {
+          if (!el || !val || val === "None" || val === "") return false;
+          for (let i = 0; i < el.options.length; i++) {
+              if (el.options[i].value.trim() === val) {
+                  el.selectedIndex = i;
+                  return true;
+              }
+          }
+          return false;
+      }
+
+      function apply() {
+          const deptEl = document.getElementById("department");
+          const yearEl = document.getElementById("year");
+          const semEl  = document.getElementById("semester");
+          const regEl  = document.getElementById("regulation");
+
+          if (!deptEl || !yearEl || !semEl) return;
+
+          // Regulation
+          regEl.value = "R2021";
+
+          // Dept
+          selectByValue(deptEl, userDept);
+
+          // Year
+          if (selectByValue(yearEl, userYear)) {
+              updateSemesters(); // Populate semesters
+              // Semester
+              if (!selectByValue(semEl, userSem)) {
+                  if (semEl.options.length > 1) semEl.selectedIndex = 1;
+              }
+          }
+
+          // Trigger Subject Loading
+          loadSubjects();
+      }
+
+      // Run multiple times to ensure stability
+      setTimeout(apply, 50);
+      setTimeout(apply, 500);
+      setTimeout(apply, 2000);
+    })();
+  </script>
+</body>
+
+</html>
+
+
+
+

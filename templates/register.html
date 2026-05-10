@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; color: #1e293b; }
+
+    .card { background: #ffffff; padding: 40px; border-radius: 16px; width: 100%; max-width: 480px; border: 1px solid #e2e8f0; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+    
+    .logo { text-align: center; margin-bottom: 30px; }
+    .logo h1 { font-size: 24px; color: #0f172a; font-weight: 700; letter-spacing: -0.5px; }
+    .logo p { font-size: 14px; color: #64748b; margin-top: 6px; }
+    
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    input { width: 100%; padding: 12px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; color: #1e293b; background: #ffffff; transition: all 0.2s ease; font-family: inherit; }
+    input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+    
+    .btn { width: 100%; padding: 14px; background: #2563eb; color: #ffffff; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 8px; transition: all 0.2s ease; }
+    .btn:hover { background: #1d4ed8; }
+    
+    .error { background: #fef2f2; color: #b91c1c; padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 20px; border: 1px solid #fee2e2; }
+    
+    .link { text-align: center; margin-top: 24px; font-size: 14px; color: #64748b; }
+    .link a { color: #2563eb; font-weight: 600; text-decoration: none; }
+  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='light-theme.css') }}">
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <h1>📚 Create Account</h1>
+    <p>Join our platform — your AI study companion</p>
+  </div>
+  
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}<div class="error">⚠️ {{ messages[0] }}</div>{% endif %}
+  {% endwith %}
+  
+  <form method="POST">
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" name="name" placeholder="Enter your full name" required>
+    </div>
+    <div class="form-group">
+      <label>College Email</label>
+      <input type="email" name="email" placeholder="your@college.edu" autocomplete="email" required>
+    </div>
+    <div class="form-group">
+      <label>Roll Number</label>
+      <input type="text" name="roll_no" placeholder="e.g. 2021CSE001" autocomplete="username" required>
+    </div>
+
+    <div class="form-group">
+      <label>Department</label>
+      <select name="department" style="width: 100%; padding: 12px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; background: #ffffff; font-family: inherit;" required>
+        <option value="">Select Department</option>
+        <option value="CSE">CSE</option>
+        <option value="IT">IT</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Current Year</label>
+      <select name="year" id="year" style="width: 100%; padding: 12px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; background: #ffffff; font-family: inherit;" required onchange="updateSemesters()">
+        <option value="">Select Year</option>
+        <option value="1st Year">1st Year</option>
+        <option value="2nd Year">2nd Year</option>
+        <option value="3rd Year">3rd Year</option>
+        <option value="4th Year">4th Year</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Current Semester</label>
+      <select name="semester" id="semester" style="width: 100%; padding: 12px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; background: #ffffff; font-family: inherit;" required>
+        <option value="">Select Year first</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" name="password" placeholder="Create a strong password" autocomplete="new-password" required>
+    </div>
+    <button class="btn" type="submit">Create Account →</button>
+  </form>
+  <div class="link">Already have an account? <a href="/login">Sign in</a></div>
+</div>
+
+<script>
+  const semesterMap = {
+    '1st Year': [['Semester 1', 'Semester 1'], ['Semester 2', 'Semester 2']],
+    '2nd Year': [['Semester 3', 'Semester 3'], ['Semester 4', 'Semester 4']],
+    '3rd Year': [['Semester 5', 'Semester 5'], ['Semester 6', 'Semester 6']],
+    '4th Year': [['Semester 7', 'Semester 7'], ['Semester 8', 'Semester 8']]
+  };
+
+  function updateSemesters() {
+    const year = document.getElementById('year').value;
+    const semSelect = document.getElementById('semester');
+    semSelect.innerHTML = '<option value="">Select Semester</option>';
+    if (semesterMap[year]) {
+      semesterMap[year].forEach(([val, label]) => {
+        const opt = document.createElement('option');
+        opt.value = val;
+        opt.textContent = label;
+        semSelect.appendChild(opt);
+      });
+    }
+  }
+</script>
+</body>
+</html>
+
+
+
+

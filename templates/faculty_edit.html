@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit AI Content</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+    .navbar {
+      height: 72px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar-brand {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .navbar-brand span {
+      color: #10b981;
+    }
+
+    .nav-badge {
+      background: #f0fdf4;
+      color: #10b981;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      border: 1px solid #dcfce7;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .header {
+      margin-bottom: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+
+    .subject-info {
+      color: #10b981;
+      font-weight: 800;
+      font-size: 12px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group label span {
+      font-size: 16px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px;
+      color: #1e293b;
+      font-family: inherit;
+      font-size: 15px;
+      line-height: 1.6;
+      resize: vertical;
+      transition: 0.2s;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 40px;
+      padding-top: 32px;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-save {
+      background: #10b981;
+      color: #ffffff;
+      border: none;
+    }
+
+    .btn-save:hover {
+      background: #059669;
+    }
+
+    .btn-cancel {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+    }
+
+    .btn-cancel:hover {
+      background: #e2e8f0;
+    }
+
+    .help-text {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 6px;
+    }
+  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='light-theme.css') }}">
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-brand">📚 Study<span>Material</span> <span class="nav-badge">FACULTY EDITOR</span></div>
+  </nav>
+
+  <div class="container">
+    <form action="/faculty/edit/{{ item.id }}" method="POST">
+      <div class="header">
+        <div>
+          <div class="subject-info">{{ item.subject }}</div>
+          <h1>✏️ Edit: {{ item.topic }}</h1>
+          <p style="color: #5f6f86;">Refine the AI content before verifying it for students.</p>
+        </div>
+        <div class="actions" style="margin-top: 0; padding-top: 0; border: none;">
+          <a href="/faculty/verify" class="btn btn-cancel">Cancel</a>
+          <button type="submit" class="btn btn-save">Verify & Save</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label><span>📋</span> Summary</label>
+          <textarea name="summary">{{ item.summary }}</textarea>
+          <p class="help-text">A brief overview of the topic.</p>
+        </div>
+
+        <div class="form-group">
+          <label><span>📝</span> Short Notes</label>
+          <textarea name="short_notes" style="min-height: 300px;">{{ item.short_notes }}</textarea>
+          <p class="help-text">Detailed study points and explanations.</p>
+        </div>
+
+        <div class="form-group">
+          <label><span>💻</span> Coding Examples / Practical Instances</label>
+          <textarea name="coding_examples" placeholder="None">{{ item.coding_examples }}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label><span>❓</span> Important Questions</label>
+          <textarea name="important_questions" style="min-height: 200px;">{{ item.important_questions }}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label><span>🧠</span> MCQs (Multiple Choice Questions)</label>
+          <textarea name="mcqs" style="min-height: 200px;">{{ item.mcqs }}</textarea>
+          <p class="help-text">Keep the JSON-like formatting if possible to maintain interactivity.</p>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn btn-save">✅ Save Edits & Verify Content</button>
+          <a href="/faculty/verify" class="btn btn-cancel">Discard Changes</a>
+        </div>
+      </div>
+    </form>
+  </div>
+
+</body>
+
+</html>

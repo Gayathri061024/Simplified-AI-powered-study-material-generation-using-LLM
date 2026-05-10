@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study History</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #f8fafc;
+      min-height: 100vh;
+      color: #1e293b;
+      position: relative;
+    }
+
+    .navbar {
+      background: #ffffff;
+      padding: 0 40px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar-brand {
+      font-size: 22px;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+    }
+
+    .navbar-brand span {
+      color: #2563eb;
+    }
+
+    .navbar-links {
+      display: flex;
+      gap: 12px;
+    }
+
+    .navbar-links a {
+      color: #475569;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      transition: all 0.2s ease;
+    }
+
+    .navbar-links a:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    .stats-bar {
+      background: #2563eb;
+      border-radius: 16px;
+      padding: 28px 36px;
+      margin-bottom: 32px;
+      display: flex;
+      gap: 48px;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.1);
+    }
+
+    .stat h2 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -1px;
+    }
+
+    .stat p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .page-title {
+      font-size: 20px;
+      color: #0f172a;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .history-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      border: 1px solid #e2e8f0;
+      transition: all 0.2s;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .history-card:hover {
+      border-color: #3b82f6;
+    }
+
+    .history-info h3 {
+      font-size: 16px;
+      color: #0f172a;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .history-info p {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+
+    .badge {
+      background: #f1f5f9;
+      color: #475569;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      border: 1px solid #e2e8f0;
+      text-transform: uppercase;
+    }
+
+    .history-actions {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .btn-view {
+      padding: 10px 20px;
+      background: #2563eb;
+      color: #ffffff;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .btn-view:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-delete {
+      padding: 10px 20px;
+      background: #fef2f2;
+      color: #dc2626;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid #fee2e2;
+      transition: all 0.2s;
+    }
+
+    .btn-delete:hover {
+      background: #fee2e2;
+    }
+
+    .empty-state {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 60px 40px;
+      text-align: center;
+      border: 1px solid #e2e8f0;
+    }
+
+    .empty-state .icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .empty-state h3 {
+      font-size: 18px;
+      color: #0f172a;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 24px;
+    }
+
+    .btn-go {
+      display: inline-flex;
+      padding: 12px 24px;
+      background: #2563eb;
+      color: #ffffff;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .btn-go:hover {
+      background: #1d4ed8;
+    }
+
+    @media (max-width: 768px) {
+      .history-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .history-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='light-theme.css') }}">
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="navbar-brand">📚 Study<span>Material</span></div>
+    <div class="navbar-links">
+      <a href="/dashboard"><span>🏠</span> Dashboard</a>
+      <a href="/logout"><span>🚪</span> Logout</a>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="stats-bar">
+      <div class="stat">
+        <h2>{{ records|length }}</h2>
+        <p>Topics Mastered</p>
+      </div>
+      <div class="stat">
+        <h2>{{ records|map(attribute='subject')|unique|list|length }}</h2>
+        <p>Subjects Explored</p>
+      </div>
+    </div>
+    <p class="page-title"><span>📋</span> Your Study Vault</p>
+    {% if records %}
+    {% for record in records %}
+    <div class="history-card">
+      <div class="history-info">
+        <h3>📚 {{ record.subject }} — {{ record.topic }}</h3>
+        <p>Generated on {{ record.created_at.strftime("%d %b %Y, %I:%M %p") }}</p>
+        <div class="badges">
+          <span class="badge">{{ record.course_level }}</span>
+          <span class="badge">{{ record.department }}</span>
+          <span class="badge">{{ record.year }}</span>
+          <span class="badge">{{ record.semester }}</span>
+          {% if record.is_verified %}
+          <span class="badge" style="background:#f0fdf4; color:#166534; border-color:#dcfce7;">✅ Verified</span>
+          {% else %}
+          <span class="badge" style="background:#fffbeb; color:#92400e; border-color:#fef3c7;">⏳ Pending</span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="history-actions">
+        <a class="btn-view" href="/history/{{ record.id }}">👁 View Material</a>
+        <a class="btn-delete" href="/history/delete/{{ record.id }}"
+          onclick="return confirm('Permanently delete this study material?')">🗑 Delete</a>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="empty-state">
+      <div class="icon">📭</div>
+      <h3>Your vault is empty</h3>
+      <p>Generate your first personalized study material to see it here.</p>
+      <a class="btn-go" href="/dashboard">Generate Material →</a>
+    </div>
+    {% endif %}
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Study Material Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; color: #1e293b; }
+
+    .card { background: #ffffff; padding: 40px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 500px; border: 1px solid #e2e8f0; }
+    
+    h2 { color: #0f172a; text-align: center; margin-bottom: 8px; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+    h2 span { color: #2563eb; }
+    p.subtitle { text-align: center; color: #64748b; font-size: 14px; margin-bottom: 28px; }
+    
+    .form-group { margin-bottom: 18px; }
+    label { display: block; font-weight: 600; color: #475569; font-size: 12px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    
+    select, input { width: 100%; padding: 12px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; color: #1e293b; background: #ffffff; transition: all 0.2s ease; font-family: inherit; }
+    select:focus, input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+    
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    
+    button { width: 100%; padding: 14px; background: #2563eb; color: #ffffff; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 12px; transition: all 0.2s ease; }
+    button:hover { background: #1d4ed8; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    
+    .error { background: #fef2f2; color: #b91c1c; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; border: 1px solid #fee2e2; }
+    .info { background: #eff6ff; color: #1e40af; padding: 12px; border-radius: 8px; font-size: 13px; margin-top: 10px; display: none; border: 1px solid #dbeafe; }
+
+    .lang-picker { display: none; background: #fdfaf1; border: 1px solid #fef3c7; border-radius: 8px; padding: 14px; margin-bottom: 18px; }
+    .lang-picker.visible { display: block; }
+    .lang-picker-title { font-size: 12px; font-weight: 700; color: #92400e; margin-bottom: 10px; }
+    .lang-options { display: flex; gap: 8px; }
+    .lang-option label { display: block; padding: 10px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; transition: all 0.2s; }
+    .lang-option input[type=radio] { display: none; }
+    .lang-option input[type=radio]:checked + label { background: #fef3c7; border-color: #f59e0b; color: #92400e; }
+  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='light-theme.css') }}">
+</head>
+<body>
+<div class="card">
+  <h2>📚 <span>Study Material</span> Generator</h2>
+  <p class="subtitle">Premium Study Materials for Engineering Students</p>
+
+  {% if error %}
+  <div class="error">⚠️ {{ error }}</div>
+  {% endif %}
+
+  <form action="/generate" method="POST" id="mainForm">
+
+    <div class="row">
+      <div class="form-group">
+        <label>Department</label>
+        <select name="department" id="department" required onchange="loadSubjects()">
+          <option value="">Select Dept</option>
+          <option value="CSE">CSE</option>
+          <option value="IT">IT</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Regulation</label>
+        <select name="regulation">
+          <option value="R2021" selected>R2021</option>
+          <!-- Future Regulations:
+          <option value="R2019">R2019</option>
+          <option value="R2017">R2017</option>
+          -->
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label>Year</label>
+        <select name="year" id="year" required onchange="updateSemesters(); loadSubjects();">
+          <option value="">Select Year</option>
+          <option value="1st Year">1st Year</option>
+          <option value="2nd Year">2nd Year</option>
+          <option value="3rd Year">3rd Year</option>
+          <option value="4th Year">4th Year</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Semester</label>
+        <select name="semester" id="semester" required onchange="loadSubjects()">
+          <option value="">Select Sem</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Subject</label>
+      <select name="subject_code" id="subject_select" required onchange="setSubjectName()">
+        <option value="">Select Dept, Year & Sem first</option>
+      </select>
+      <input type="hidden" name="subject_name" id="subject_name">
+      <div class="info" id="material_info"></div>
+    </div>
+
+    <div class="form-group">
+      <label>Topic</label>
+      <input type="text" name="topic" placeholder="e.g. Binary Trees, Sorting, Linked List" required>
+    </div>
+
+    <!-- Tamil Language Preference -->
+    <div class="lang-picker" id="lang_picker">
+      <div class="lang-picker-title">🌐 மொழி தேர்வு / Choose Language</div>
+      <div class="lang-options">
+        <div class="lang-option">
+          <input type="radio" name="language_preference" id="lang_tamil" value="tamil">
+          <label for="lang_tamil">🅣 தமிழில் / In Tamil</label>
+        </div>
+        <div class="lang-option">
+          <input type="radio" name="language_preference" id="lang_english" value="english" checked>
+          <label for="lang_english">🔤 English / ஆங்கிலத்தில்</label>
+        </div>
+      </div>
+    </div>
+    <input type="hidden" name="language_preference" id="lang_hidden" value="english">
+
+    <button type="submit" id="submitBtn">⚡ Generate Material</button>
+
+  </form>
+</div>
+
+<script>
+  const semesterMap = {
+    '1st Year': [['Semester 1', 'Semester 1'], ['Semester 2', 'Semester 2']],
+    '2nd Year': [['Semester 3', 'Semester 3'], ['Semester 4', 'Semester 4']],
+    '3rd Year': [['Semester 5', 'Semester 5'], ['Semester 6', 'Semester 6']],
+    '4th Year': [['Semester 7', 'Semester 7'], ['Semester 8', 'Semester 8']]
+  };
+
+  function updateSemesters() {
+    const year = document.getElementById('year').value;
+    const semSelect = document.getElementById('semester');
+    semSelect.innerHTML = '<option value="">Select Sem</option>';
+    if (semesterMap[year]) {
+      semesterMap[year].forEach(([val, label]) => {
+        const opt = document.createElement('option');
+        opt.value = val; opt.textContent = label;
+        semSelect.appendChild(opt);
+      });
+    }
+  }
+
+  function loadSubjects() {
+    const dept = document.getElementById("department").value;
+    const year = document.getElementById("year").value;
+    const sem  = document.getElementById("semester").value;
+    const select = document.getElementById("subject_select");
+    const info = document.getElementById("material_info");
+
+    if (!dept || !year || !sem) return;
+
+    select.innerHTML = '<option value="">Loading...</option>';
+
+    fetch("/get_subjects", {
+      method: "POST",
+      headers: {"Content-Type": "application/x-www-form-urlencoded"},
+      body: `department=${dept}&year=${encodeURIComponent(year)}&semester=${encodeURIComponent(sem)}`
+    })
+    .then(res => res.json())
+    .then(subjects => {
+      select.innerHTML = '<option value="">Select Subject</option>';
+      if (subjects.length === 0) {
+        select.innerHTML = '<option value="">No subjects found</option>';
+        return;
+      }
+      subjects.forEach(sub => {
+        const opt = document.createElement("option");
+        opt.value = sub.code;
+        opt.textContent = `${sub.code} - ${sub.name}`;
+        opt.dataset.name = sub.name;
+        select.appendChild(opt);
+      });
+    });
+
+    info.style.display = "none";
+  }
+
+  function setSubjectName() {
+    const select = document.getElementById("subject_select");
+    const selected = select.options[select.selectedIndex];
+    document.getElementById("subject_name").value = selected.dataset.name || "";
+
+    const dept = document.getElementById("department").value;
+    const year = document.getElementById("year").value;
+    const sem  = document.getElementById("semester").value;
+    const code = select.value;
+    const info = document.getElementById("material_info");
+    const subName = selected.dataset.name || "";
+
+    // Show/hide language picker based on subject name
+    const langPicker = document.getElementById("lang_picker");
+    const isTamil = subName.toLowerCase().includes("tamil") || subName.includes("தமிழ்");
+    if (isTamil) {
+      langPicker.classList.add("visible");
+    } else {
+      langPicker.classList.remove("visible");
+      document.getElementById("lang_hidden").value = "english";
+    }
+
+    if (!code) { info.style.display = "none"; return; }
+
+    fetch("/get_subjects", {
+      method: "POST",
+      headers: {"Content-Type": "application/x-www-form-urlencoded"},
+      body: `department=${dept}&year=${encodeURIComponent(year)}&semester=${encodeURIComponent(sem)}`
+    })
+    .then(res => res.json())
+    .then(() => {
+      info.style.display = "flex";
+      info.style.alignItems = "center";
+      info.style.gap = "6px";
+      info.innerHTML = "✨ <span>Notes & PYQs will be auto-loaded!</span>";
+    });
+  }
+
+  // Sync radio buttons to hidden input
+  document.querySelectorAll('input[name="language_preference"]').forEach((elem) => {
+    elem.addEventListener("change", function(event) {
+      document.getElementById("lang_hidden").value = event.target.value;
+    });
+  });
+</script>
+</body>
+</html>
+```
+
+---
+
+## Step 5 — How to Add PDFs to Backend
+
+Just place your PDFs in the correct folder:
+```
+study_materials/
+└── CSE/
+    └── 2nd Year/
+        └── Semester 3/
+            └── CS3301/
+                ├── notes.pdf   ← your notes PDF
+                └── pyq.pdf     ← previous year QP PDF
+```
+
+**That's it!** The app will automatically pick them up when a student selects that subject.
+
+---
+
+## How It Works Now
+```
+Student selects: CSE → 2nd Year → Semester 3
+      ↓
+Subjects auto-load in dropdown (CS3301, CS3391 etc.)
+      ↓
+Student selects subject + types topic
+      ↓
+App checks backend folder for notes.pdf and pyq.pdf
+      ↓
+If found → AI uses them as reference
+If not found → AI uses its own knowledge
+      ↓
+Generates full study material + previous year questions ✅
+No PDF upload needed by student! ✅
+
+
+
+
