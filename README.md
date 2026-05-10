@@ -1,0 +1,1 @@
+# Simplified-AI-powered-study-material-generation-using-LLM
